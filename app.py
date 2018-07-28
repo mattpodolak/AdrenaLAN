@@ -107,7 +107,8 @@ for path in paths:
 # LOAD ENEMIES
 enemyArr = enemy_gen.loadEnemies(rooms, max_rooms * 2)
 for enemy in enemyArr:
-     print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'], 'ATT:', enemy['att'], 'HP:', enemy['hp'])
+    # enemy_arr.append({'x_loc' : x_pos, 'y_loc' : y_pos, 'hp' : stat_hp, 'att' : stat_att, 'elem' : stat_elem, 'crit_dmg' : crit_dmg, 'crit_chc' : crit_chc, 'mutations' : stat_mut, 'size' : default_size})
+    print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'], '     HP:', enemy['hp'],'| ATT:', enemy['att'],'| Element', enemy['elem'], '| CDMG:', str(enemy['crit_dmg']) + 'X', '| CHC:', str(enemy['crit_chc']) + '%', '| MUTATIONS: ', enemy['mutations'])
 
 
 # Create graphical window
