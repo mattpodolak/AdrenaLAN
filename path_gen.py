@@ -114,21 +114,21 @@ def roomPath(roomA, roomB):
                 path_arr.append({'x_loc' : (start_A['x_loc'] + x_val - i), 'y_loc' : start_A['y_loc']})
                 ini_starta = start_A['x_loc'] + x_val
                 for j in range(y_val+1):
-                    # A is higher
-                    if(start_A['y_loc'] <= start_B['x_loc']):
-                        path_arr.append({'x_loc' : ini_starta, 'y_loc' : start_B['y_loc'] - j})
+                    # A is higher, go down
+                    if(start_A['y_loc'] <= start_B['y_loc']):
+                        path_arr.append({'x_loc' : ini_starta, 'y_loc' : start_A['y_loc'] + j})
                     else:
-                        path_arr.append({'x_loc' : ini_starta, 'y_loc' : start_B['y_loc'] + j})
+                        path_arr.append({'x_loc' : ini_starta, 'y_loc' : start_A['y_loc'] - j})
             # B is more left
             else: 
                 path_arr.append({'x_loc' : (start_B['x_loc'] + x_val - i), 'y_loc' : start_B['y_loc']})
                 ini_startb = start_B['x_loc'] + x_val
                 for j in range(y_val+1):
-                    # A is higher
-                    if(start_A['y_loc'] <= start_B['x_loc']):
-                        path_arr.append({'x_loc' : ini_startb, 'y_loc' : start_A['y_loc'] - j})
-                    else:
+                    # A is higher, go down
+                    if(start_A['y_loc'] <= start_B['y_loc']):
                         path_arr.append({'x_loc' : ini_startb, 'y_loc' : start_A['y_loc'] + j})
+                    else:
+                        path_arr.append({'x_loc' : ini_startb, 'y_loc' : start_A['y_loc'] - j})
        
         return path_arr
 
