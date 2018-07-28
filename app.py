@@ -10,12 +10,12 @@ pygame.init()
 GENERATION VARIABLES
 
 '''
-map_min_width = 60
-map_max_width = 70
-map_min_height = 60
-map_max_height = 70
-min_rooms = 5
-max_rooms = 8
+map_min_width = 50
+map_max_width = 60
+map_min_height = 50
+map_max_height = 60
+min_rooms = 3
+max_rooms = 4
 min_size = 4
 max_size = 8
 min_dist_bw_rooms = 2
@@ -70,9 +70,7 @@ print('Generating paths')
 paths = path_gen.generatePaths(rooms)
 
 print('Loading paths onto map')
-print(paths)
 for path in paths:
-    print(path)
     x = path['x_loc']
     y = path['y_loc']
     mapArr[x, y] = 0
