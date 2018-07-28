@@ -34,11 +34,8 @@ def generatePaths(room_arr):
         print('START POINT   X: ', room_arr[i]['x_loc'], ' Y: ', room_arr[i]['y_loc'], ' W: ', room_arr[i]['width'], 'H: ', room_arr[i]['height'])
         print('CLOSEST POINT X: ', closestRoom['x_loc'], ' Y: ', closestRoom['y_loc'], ' W: ', closestRoom['width'], 'H: ', closestRoom['height'])
         print('DISTANCE: ', minDist)
-        path_arr=roomPath(room_arr[i], closestRoom)
+        path_arr.extend(roomPath(room_arr[i], closestRoom))
         print('______________________________________________')
-    
-
-
     
     return path_arr
 
@@ -58,7 +55,7 @@ def roomPath(roomA, roomB):
 
         # find START POINT for A
         roomA_middleX = roomA['x_loc'] + (roomA['width'] // 2)
-        roomA_middleY = roomA['y_loc'] - (roomA['height'] // 2)
+        roomA_middleY = roomA['y_loc'] + (roomA['height'] // 2)
         a_top = roomDist(roomA_middleX, roomA['y_loc'], roomB['x_loc'], roomB['y_loc'])
         a_bottom = roomDist(roomA_middleX, roomA['y_loc'] - roomA['height'], roomB['x_loc'], roomB['y_loc'])
         a_left = roomDist(roomA['x_loc'], roomA_middleY, roomB['x_loc'], roomB['y_loc'])
@@ -82,7 +79,7 @@ def roomPath(roomA, roomB):
 
         # find END POINT for B
         roomB_middleX = roomB['x_loc'] + (roomB['width'] // 2)
-        roomB_middleY = roomB['y_loc'] - (roomB['height'] // 2)
+        roomB_middleY = roomB['y_loc'] + (roomB['height'] // 2)
         b_top = roomDist(roomA['x_loc'], roomA['y_loc'], roomB_middleX, roomB['y_loc'])
         b_bottom = roomDist(roomA['x_loc'], roomA['y_loc'], roomB_middleX, roomB['y_loc'] - roomB['height'])
         b_left = roomDist(roomA['x_loc'], roomA['y_loc'], roomB['x_loc'], roomB_middleY)

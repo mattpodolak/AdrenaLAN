@@ -15,7 +15,7 @@ map_max_width = 70
 map_min_height = 60
 map_max_height = 70
 min_rooms = 5
-max_rooms = 8
+max_rooms = 6
 min_size = 4
 max_size = 8
 min_dist_bw_rooms = 2
@@ -69,13 +69,15 @@ print('______________________________________________')
 print('Generating paths')
 paths = path_gen.generatePaths(rooms)
 
+count = 0
 print('Loading paths onto map')
-print(paths)
 for path in paths:
-    print(path)
+    count = count + 1
+    print(paths)
     x = path['x_loc']
     y = path['y_loc']
     mapArr[x, y] = 0
+print(count)
 
 
 # Create graphical window
