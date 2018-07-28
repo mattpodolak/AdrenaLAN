@@ -19,13 +19,13 @@ def path(rooms):
             y2 = near_room['y_loc']
             width2 = near_room['width']
             height2 = near_room['height']
+            print(near_room)
 
             # pick side to start path
             delt_x = x2-x
             delt_y = y2-y
 
             if(abs(delt_y) < abs(delt_x)):
-                print('hello')
                 if(delt_y > 0):
                     # start on bottom, pick pixel to start at
                     start_pt_x = random.randint(x+1, x-1+width)
@@ -55,7 +55,6 @@ def path(rooms):
                         end_pt_y = random.randint(y2+1, y2+height2-1)
                         pathArr = createPath(pathArr, 'top', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
             else:
-                print('Hello')
                 if(delt_x > 0):
                     # start on right, pick pixel to start at
                     start_pt_y = random.randint(y+1, y+height-1)

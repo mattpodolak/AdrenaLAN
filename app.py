@@ -75,16 +75,21 @@ char_y_rel = window_height_units//2
 # ensure screen isnt pushed out of area
 if(char_x < char_x_rel):
     char_x_rel = char_x
+    window_x_units = 0
+elif(char_x+char_x_rel>= mapWidth):
+    char_x_rel = char_x-mapWidth+window_width_units
+    window_x_units = mapWidth-window_width_units
+else:
+    window_x_units = char_x - char_x_rel
+
 if(char_y < char_y_rel):
     char_y_rel = char_y
-
-if(char_x+char_x_rel>= mapWidth):
-    char_x_rel - mapWidth + window_width_units
-if(char_y+char_y_rel>= mapHeight):
-    char_y_rel - mapHeight + window_height_units
-
-window_x_units = char_x - char_x_rel
-window_y_units = char_y - char_y_rel
+    window_y_units = 0
+elif(char_y+char_y_rel>= mapHeight):
+    char_y_rel = char_y-mapHeight+window_height_units
+    window_y_units = mapHeight-window_height_units
+else:
+    window_y_units = char_y - char_y_rel
 
 # add paths
 print('______________________________________________')
@@ -116,8 +121,8 @@ def renderMap():
     #Clear screen
     screen.fill(black)
     # create rectangles
-    for x in range(window_x_units, window_width_units+window_x_units-1):
-        for y in range(window_y_units, window_height_units+window_y_units-1):
+    for x in range(window_x_units, window_width_units+window_x_units):
+        for y in range(window_y_units, window_height_units+window_y_units):
             # shift graphics depending on window location
             new_x = x-window_x_units
             new_y = y-window_y_units
