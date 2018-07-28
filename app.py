@@ -48,7 +48,7 @@ size = window_width, window_height
 mapArr = map_gen.generateMap(map_min_width, map_max_width, map_min_height, map_max_height)
 mapWidth, mapHeight = mapArr.shape
 
-print('Height, Width', mapWidth, mapHeight)
+print('Width, Height', mapWidth, mapHeight)
 rooms = map_gen.generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist_bw_rooms, mapWidth, mapHeight)
 
 # add rooms
