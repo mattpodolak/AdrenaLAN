@@ -94,9 +94,12 @@ paths = path_gen.generatePaths(rooms)
 
 print('Loading paths onto map')
 for path in paths:
-    x = path['x_loc']
-    y = path['y_loc']
-    mapArr[x, y] = 0
+    x = abs(path['x_loc'])
+    y = abs(path['y_loc'])
+    try:
+        mapArr[x, y] = 0
+    except IndexError:
+        pass
 
 
 # Create graphical window
@@ -124,6 +127,7 @@ def renderMap():
                 #print('Drawing floor')
                 screen.blit(floor, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
     # draw goal point
+    # new_x = (add)-window_x_units
     new_x = end_x-window_x_units
     new_y = end_y-window_y_units
     screen.blit(goal, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
