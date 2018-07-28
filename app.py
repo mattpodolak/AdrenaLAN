@@ -57,7 +57,8 @@ for room in rooms:
     x = room['x_loc']
     x2 = x+room['width']
     y = room['y_loc']
-    y2 = x+room['height']
+    y2 = y+room['height']
+    print('Passed room vars (x, x2, y, y2): ', x, x2, y, y2)
     # 2 is wall surrounding a floor
     mapArr[x-1:x2+1, y-1:y2+1] = 2
     # 0 is floor
