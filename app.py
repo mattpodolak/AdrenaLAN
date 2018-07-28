@@ -1,4 +1,4 @@
-import sys, pygame, map_gen, path_gen2, start_end
+import sys, pygame, map_gen, path_gen, start_end
 import numpy as np
 import pygame.surfarray as surfarray
 
