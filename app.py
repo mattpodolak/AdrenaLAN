@@ -100,13 +100,6 @@ for path in paths:
         pass
 
 
-# add enemies
-enemy_list = enemy_gen.loadEnemies(rooms, 4)
-for enemy in enemy_list:
-    print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'])
-
-
-
 # Create graphical window
 screen = pygame.display.set_mode(size)
 screen.fill(white)
