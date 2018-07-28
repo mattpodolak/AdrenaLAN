@@ -26,7 +26,7 @@ DISPLAY VARIABLES
 
 '''
 # pixels in a unit
-unit_size = 32
+unit_size = 64
 
 white = 1, 1, 1
 black = 0, 0, 0
@@ -36,8 +36,8 @@ window_x_units = 0
 window_y_units = 0
 
 # window size with pixels and units
-window_width_units = 40
-window_height_units = 20
+window_width_units = 20
+window_height_units = 10
 window_width = window_width_units * unit_size
 window_height = window_height_units * unit_size
 
@@ -111,11 +111,49 @@ for enemy in enemyArr:
 screen = pygame.display.set_mode(size)
 screen.fill(white)
 
-wall = pygame.image.load("assets/wall/default-wall.bmp")
-floor = pygame.image.load("assets/floor/default-floor.bmp")
-char = pygame.image.load("assets/character/knight.png")
-goal = pygame.image.load("assets/floor/goal.png")
-starfish = pygame.image.load("assets/enemy/starfish.png")
+wall = pygame.image.load("assets/wall/default-wall-64.bmp")
+floor = pygame.image.load("assets/floor/default-floor-64.bmp")
+char = pygame.image.load("assets/character/knight-64.png")
+goal = pygame.image.load("assets/floor/goal-64.png")
+starfish = pygame.image.load("assets/enemy/starfish-64.png")
+
+def checkForEnemy(x, y):
+    # return false if enemy occupying space
+    # return true if u can move there
+    for enemy in enemyArr:
+        en_x = enemy['x_loc']
+        en_y = enemy['y_loc']
+        if(en_x == x and en_y == y):
+            return False
+    
+    return True
+    
+def validMove(move):
+    arrayLoc_x = window_x_units + char_x_rel
+    arrayLoc_y = window_y_units + char_y_rel
+    if(move == 'w' and arrayLoc_y != 0):
+        if(mapArr[arrayLoc_x, arrayLoc_y-1] == 0):
+            return checkForEnemy(arrayLoc_x, arrayLoc_y-1)
+        else:
+            return False
+    elif(move == 's' and arrayLoc_y != mapHeight):
+        if(mapArr[arrayLoc_x, arrayLoc_y+1] == 0):
+            return checkForEnemy(arrayLoc_x, arrayLoc_y+1)
+        else:
+            return False
+    elif(move == 'a' and arrayLoc_x != 0):
+        if(mapArr[arrayLoc_x-1, arrayLoc_y] == 0):
+            return checkForEnemy(arrayLoc_x-1, arrayLoc_y)
+        else:
+            return False
+    elif(move == 'd' and arrayLoc_x != mapWidth):
+        if(mapArr[arrayLoc_x+1, arrayLoc_y] == 0):
+            return checkForEnemy(arrayLoc_x, arrayLoc_y+1)
+        else:
+            return False
+    else:
+        return False
+        
 
 def renderMap():
     #Clear screen
@@ -158,6 +196,8 @@ def moveScreen(keyWASD):
         if(window_y_units > 0):
             window_y_units-=1
             renderMap()
+        elif(validMove('w')):
+            
         else:
             print('Cant move that direction')
 
