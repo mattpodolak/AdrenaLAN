@@ -1,4 +1,4 @@
-import sys, pygame, map_gen, path_gen
+import sys, pygame, map_gen, path_gen, start_end
 import numpy as np
 import pygame.surfarray as surfarray
 
@@ -64,6 +64,9 @@ for room in rooms:
     # 0 is floor
     mapArr[x:x2, y:y2] = 0
 
+# pick start and end points
+char_x, char_y, start_room = start_end.gen_start(rooms)
+
 # add paths
 print('______________________________________________')
 print('Generating paths')
@@ -84,6 +87,8 @@ screen.fill(white)
 
 wall = pygame.image.load("assets/wall/default-wall.bmp")
 floor = pygame.image.load("assets/floor/default-floor.bmp")
+char = pygame.image.load("assets/character/knight.png")
+goal = pygame.image.load("assets/floor/goal.bmp")
 
 def renderMap():
     #Clear screen
@@ -100,6 +105,12 @@ def renderMap():
             elif(mapArr[x, y] == 0):
                 #print('Drawing floor')
                 screen.blit(floor, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+    # draw goal point
+
+    # draw character
+    new_x = char_x-window_x_units
+    new_y = char_y-window_y_units
+    screen.blit(char, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
 
 renderMap()
 

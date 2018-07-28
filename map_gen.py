@@ -27,8 +27,8 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
     for i in range(0, num_rooms):
         print('Making: Room ', i)
         # pick width and height
-        width = random.randint(min_size, max_size+1)
-        height = random.randint(min_size, max_size+1)
+        width = random.randint(min_size, max_size)
+        height = random.randint(min_size, max_size)
 
         if i != 0:
             conflict = True
@@ -36,8 +36,8 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
 
             while conflict == True:
                 conflict = False
-                x_loc = random.randint(2, mapWidth-width-1)
-                y_loc = random.randint(2, mapHeight-height-1)
+                x_loc = random.randint(2, mapWidth-width-2)
+                y_loc = random.randint(2, mapHeight-height-2)
 
                 if loop_count == 5:
                     print('OH NO! making room smallest size')
@@ -70,8 +70,8 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
                 loop_count+=1
 
         else:
-            x_loc = random.randint(0, mapWidth-width)
-            y_loc = random.randint(0, mapHeight-height)
+            x_loc = random.randint(2, mapWidth-width-2)
+            y_loc = random.randint(2, mapHeight-height-2)
 
         # store data
         print('width, height, x, y', width, height, x_loc, y_loc)
