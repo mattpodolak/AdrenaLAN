@@ -71,6 +71,7 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
                     or (room['y_loc'] < y_loc and room_y > check_y and room['x_loc'] > x_loc and room['x_loc'] < check_x)
                     or (room['x_loc'] > x_loc and room_x < check_x and room['y_loc'] < y_loc and room['y_loc'] > check_y)
                     or (room['y_loc'] > y_loc and room_y < check_y and room['x_loc'] < x_loc and room['x_loc'] > check_x)
+                    or (room['y_loc'] == y_loc+1 or room['y_loc'] == y_loc-1 or room['x_loc'] == x_loc+1 or room['x_loc'] == x_loc-1)
                     ):
                         print('Room Conflict')
                         conflict = True

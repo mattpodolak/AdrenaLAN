@@ -1,4 +1,4 @@
-import sys, pygame, map_gen, path_gen, start_end, enemy_gen
+import sys, pygame, map_gen, path_gen2, start_end, enemy_gen
 import numpy as np
 import pygame.surfarray as surfarray
 
@@ -75,29 +75,31 @@ char_y_rel = window_height_units//2
 # ensure screen isnt pushed out of area
 if(char_x < char_x_rel):
     char_x_rel = char_x
+    window_x_units = 0
+elif(char_x+char_x_rel>= mapWidth):
+    char_x_rel = char_x-mapWidth+window_width_units
+    window_x_units = mapWidth-window_width_units
+else:
+    window_x_units = char_x - char_x_rel
+
 if(char_y < char_y_rel):
     char_y_rel = char_y
-
-if(char_x+char_x_rel>= mapWidth):
-    char_x_rel - mapWidth + window_width_units
-if(char_y+char_y_rel>= mapHeight):
-    char_y_rel - mapHeight + window_height_units
-
-window_x_units = char_x - char_x_rel
-window_y_units = char_y - char_y_rel
+    window_y_units = 0
+elif(char_y+char_y_rel>= mapHeight):
+    char_y_rel = char_y-mapHeight+window_height_units
+    window_y_units = mapHeight-window_height_units
+else:
+    window_y_units = char_y - char_y_rel
 
 # add paths
 print('______________________________________________')
 print('Generating paths')
-paths = path_gen.generatePaths(rooms)
+paths = path_gen2.path(rooms)
 print('Loading paths onto map')
 for path in paths:
-    x = abs(path['x_loc'])
-    y = abs(path['y_loc'])
-    try:
-        mapArr[x, y] = 0
-    except IndexError:
-        pass
+    x = path['x_loc']
+    y = path['y_loc']
+    mapArr[x, y] = 0
 
 # LOAD ENEMIES
 enemyArr = enemy_gen.loadEnemies(rooms, max_rooms * 2)
