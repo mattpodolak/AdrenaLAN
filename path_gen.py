@@ -31,20 +31,30 @@ myArr = [
         'height' : 10,
         'connected' : False
     },   
+    {
+        'x_loc' : 60,
+        'y_loc' : 250,
+        'width' : 10,
+        'height' : 10,
+        'connected' : False
+    },   
 ]
 
 # generate all paths
-def generatePaths(room_arr, map_width):
+def generatePaths(room_arr):
     # loop through each room
     path_arr = []
 
     for i in range(len(room_arr)):
         room_arr[i]['connected'] = True
         # check other rooms
-        minDist = map_width
+        minDist = 1000
         closestRoom = ({'x_loc' : 0, 'y_loc' : 0, 'width' : 0, 'height' : 0})
         currentRoom = room_arr[i]
-        temp_room_arr = [point for point in room_arr if point != currentRoom and point['connected'] == False]
+        if currentRoom != room_arr[-1]:
+            temp_room_arr = [point for point in room_arr if point != currentRoom and point['connected'] == False]
+        else:
+            temp_room_arr = [point for point in room_arr if point != currentRoom]
         #print('CURRENT POINT: ', currentRoom)
         #print('OTHER POINTS', temp_room_arr)
         print(i+1)
@@ -64,7 +74,7 @@ def generatePaths(room_arr, map_width):
         print('CLOSEST POINT X: ', closestRoom['x_loc'], ' Y: ', closestRoom['y_loc'], ' W: ', closestRoom['width'], 'H: ', closestRoom['height'])
         print('DISTANCE: ', minDist)
         path_arr.append(roomPath(room_arr[i], closestRoom))
-        print('________________________________')
+        print('______________________________________________')
     
 
 
@@ -132,49 +142,43 @@ def roomPath(roomA, roomB):
         print('COORD_B (', start_B['x_loc'], ', ', start_B['y_loc'], ')')
         print('DIRECT_B: ', B_direction)
 
-        # # X and Y VALUES
-        # x_val = abs(start_A['x_loc'] - start_B['x_loc'])
-        # y_val = abs(start_A['y_loc'] - start_B['y_loc'])
+        # X and Y VALUES
+        x_val = abs(start_A['x_loc'] - start_B['x_loc'])
+        y_val = abs(start_A['y_loc'] - start_B['y_loc'])
+        print('BASE:', x_val, 'HEIGHT:', y_val)
 
-        # # CONNECT A TO MIDDLE
-        # if (A_direction == 'top' or A_direction == 'bottom'):
-        #     for i in range(0, y_val + 1):
-        #         if A_direction == 'top':
-        #             path_arr.append({'x_loc' : start_A['x_loc'], 'y_loc' : start_A['y_loc'] + i})
-        #         elif A_direction == 'bottom':
-        #             path_arr.append({'x_loc' : start_A['x_loc'], 'y_loc' : start_A['y_loc'] - i})
-        # elif (A_direction == 'left' or A_direction == 'right'):
-        #     for i in range(0, x_val + 1):
-        #         if A_direction == 'left':
-        #             path_arr.append({'x_loc' : start_A['x_loc'] - i, 'y_loc' : start_A['y_loc']})
-        #         elif A_direction == 'right':
-        #             path_arr.append({'x_loc' : start_A['x_loc'] + i, 'y_loc' : start_A['y_loc']})
+        # CONNECT A TO MIDDLE
+        if (A_direction == 'top' or A_direction == 'bottom'):
+            for i in range(0, y_val + 1):
+                if A_direction == 'top':
+                    path_arr.append({'x_loc' : start_A['x_loc'], 'y_loc' : start_A['y_loc'] + i})
+                elif A_direction == 'bottom':
+                    path_arr.append({'x_loc' : start_A['x_loc'], 'y_loc' : start_A['y_loc'] - i})
+        elif (A_direction == 'left' or A_direction == 'right'):
+            for i in range(0, x_val + 1):
+                if A_direction == 'left':
+                    path_arr.append({'x_loc' : start_A['x_loc'] - i, 'y_loc' : start_A['y_loc']})
+                elif A_direction == 'right':
+                    path_arr.append({'x_loc' : start_A['x_loc'] + i, 'y_loc' : start_A['y_loc']})
 
-        # # CONNECT B TO MIDDLE
-        # if (B_direction == 'top' or B_direction == 'bottom'):
-        #     for i in range(0, y_val + 1):
-        #         if B_direction == 'top':
-        #             path_arr.append({'x_loc' : start_B['x_loc'], 'y_loc' : start_B['y_loc'] + i})
-        #         elif B_direction == 'bottom':
-        #             path_arr.append({'x_loc' : start_B['x_loc'], 'y_loc' : start_B['y_loc'] - i})
-        # elif (B_direction == 'left' or B_direction == 'right'):
-        #     for i in range(0, x_val + 1):
-        #         if B_direction == 'left':
-        #             path_arr.append({'x_loc' : start_B['x_loc'] - i, 'y_loc' : start_B['y_loc']})
-        #         elif B_direction == 'right':
-        #             path_arr.append({'x_loc' : start_B['x_loc'] + i, 'y_loc' : start_B['y_loc']})
-
-        
-        # # print statements
-        # print('A  X: ', start_A['x_loc'], ' Y: ', start_A['y_loc'])
-        # print('B  X: ', start_B['x_loc'], ' Y: ', start_B['y_loc'])
+        # CONNECT B TO MIDDLE
+        if (B_direction == 'top' or B_direction == 'bottom'):
+            for i in range(0, y_val + 1):
+                if B_direction == 'top':
+                    path_arr.append({'x_loc' : start_B['x_loc'], 'y_loc' : start_B['y_loc'] + i})
+                elif B_direction == 'bottom':
+                    path_arr.append({'x_loc' : start_B['x_loc'], 'y_loc' : start_B['y_loc'] - i})
+        elif (B_direction == 'left' or B_direction == 'right'):
+            for i in range(0, x_val + 1):
+                if B_direction == 'left':
+                    path_arr.append({'x_loc' : start_B['x_loc'] - i, 'y_loc' : start_B['y_loc']})
+                elif B_direction == 'right':
+                    path_arr.append({'x_loc' : start_B['x_loc'] + i, 'y_loc' : start_B['y_loc']})
 
         # return path_arr
 
-
-
 print('generating paths...')
-generatePaths(myArr, 1000)
+generatePaths(myArr)
 print('wow no errors')
 # print(myArr)
        
