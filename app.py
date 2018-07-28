@@ -124,6 +124,7 @@ def checkForEnemy(x, y):
         en_x = enemy['x_loc']
         en_y = enemy['y_loc']
         if(en_x == x and en_y == y):
+            print('Enemy in the way')
             return False
     
     return True
@@ -131,24 +132,29 @@ def checkForEnemy(x, y):
 def validMove(move):
     arrayLoc_x = window_x_units + char_x_rel
     arrayLoc_y = window_y_units + char_y_rel
+
     if(move == 'w' and arrayLoc_y != 0):
+        print('next move ', mapArr[arrayLoc_x, arrayLoc_y-1])
         if(mapArr[arrayLoc_x, arrayLoc_y-1] == 0):
             return checkForEnemy(arrayLoc_x, arrayLoc_y-1)
         else:
             return False
     elif(move == 's' and arrayLoc_y != mapHeight):
+        print('next move ', mapArr[arrayLoc_x, arrayLoc_y+1])
         if(mapArr[arrayLoc_x, arrayLoc_y+1] == 0):
             return checkForEnemy(arrayLoc_x, arrayLoc_y+1)
         else:
             return False
     elif(move == 'a' and arrayLoc_x != 0):
+        print('next move ', mapArr[arrayLoc_x-1, arrayLoc_y])
         if(mapArr[arrayLoc_x-1, arrayLoc_y] == 0):
             return checkForEnemy(arrayLoc_x-1, arrayLoc_y)
         else:
             return False
     elif(move == 'd' and arrayLoc_x != mapWidth):
+        print('next move ', mapArr[arrayLoc_x+1, arrayLoc_y])
         if(mapArr[arrayLoc_x+1, arrayLoc_y] == 0):
-            return checkForEnemy(arrayLoc_x, arrayLoc_y+1)
+            return checkForEnemy(arrayLoc_x+1, arrayLoc_y)
         else:
             return False
     else:
@@ -196,9 +202,10 @@ def moveScreen(keyWASD):
     if(keyWASD == 'w'):
         # check if move is possible
         if(window_y_units > 0 and char_y_rel == window_height_units//2):
-            window_y_units-=1
-            renderMap()
-        elif(validMove('w')):
+            if(True == validMove('w')):
+                window_y_units-=1
+                renderMap()
+        elif(True == validMove('w')):
             char_y_rel-=1
             renderMap()
         else:
@@ -207,9 +214,10 @@ def moveScreen(keyWASD):
     elif(keyWASD == 'a'):
         # check if move is possible
         if(window_x_units > 0 and char_x_rel == window_width_units//2):
-            window_x_units-=1
-            renderMap()
-        elif(validMove('a')):
+            if(True == validMove('a')):
+                window_x_units-=1
+                renderMap()
+        elif(True == validMove('a')):
             char_x_rel-=1
             renderMap()
         else:
@@ -218,9 +226,10 @@ def moveScreen(keyWASD):
     elif(keyWASD == 's'):
         # check if move is possible
         if(window_y_units + window_height_units < mapHeight and char_y_rel == window_height_units//2):
-            window_y_units+=1
-            renderMap()
-        elif(validMove('s')):
+            if(True == validMove('s')):
+                window_y_units+=1
+                renderMap()
+        elif(True == validMove('s')):
             char_y_rel+=1
             renderMap()
         else:
@@ -229,9 +238,10 @@ def moveScreen(keyWASD):
     elif(keyWASD == 'd'):
         # check if move is possible
         if(window_x_units + window_width_units < mapWidth and char_x_rel == window_width_units//2):
-            window_x_units+=1
-            renderMap()
-        elif(validMove('d')):
+            if(True == validMove('d')):
+                window_x_units+=1
+                renderMap()
+        elif(True == validMove('d')):
             char_x_rel+=1
             renderMap()
         else:
