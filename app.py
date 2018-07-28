@@ -1,4 +1,4 @@
-import sys, pygame, map_gen, path_gen, start_end
+import sys, pygame, map_gen, path_gen, start_end, enemy_gen
 import numpy as np
 import pygame.surfarray as surfarray
 
@@ -43,7 +43,6 @@ window_height = window_height_units * unit_size
 
 # window size
 size = window_width, window_height
-
 
 mapArr = map_gen.generateMap(map_min_width, map_max_width, map_min_height, map_max_height)
 mapWidth, mapHeight = mapArr.shape
@@ -91,7 +90,6 @@ window_y_units = char_y - char_y_rel
 print('______________________________________________')
 print('Generating paths')
 paths = path_gen.generatePaths(rooms)
-
 print('Loading paths onto map')
 for path in paths:
     x = abs(path['x_loc'])
@@ -100,6 +98,13 @@ for path in paths:
         mapArr[x, y] = 0
     except IndexError:
         pass
+
+
+# add enemies
+enemy_list = enemy_gen.loadEnemies(rooms, 4)
+for enemy in enemy_list:
+    print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'])
+
 
 
 # Create graphical window
