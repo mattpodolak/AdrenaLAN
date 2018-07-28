@@ -11,7 +11,8 @@ def generateMap(min_width, max_width, min_height, max_height):
     mapHeight = random.randint(min_height, max_height+1)    
 
     # create array of 1s, dimensions equal map size (1 represents wall, 0 is floor, 2 is start, 3 is goal)
-    return mapArr = np.ones((mapWidth, mapHeight), dtype=int)
+    mapArr = np.ones((mapWidth, mapHeight), dtype=int)
+    return mapArr 
 
 def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, mapHeight):
     
@@ -50,17 +51,25 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
 
                 # check previous locations for conflicts
                 for room in room_data:
-                    if (room['x_loc']+room['width']+min_dist > x_loc || room['y_loc']+room['height']+min_dist > y_loc || x_loc+width+min_dist > room['x_loc'] || y_loc+height+min_dist > room['y_loc']):
-                        print('Room overlap!')
+                    room_x = room['x_loc']+room['width']
+                    room_y = room['y_loc']+room['height']
+                    check_x = x_loc+width
+                    check_y = y_loc+height
+                    if ((room_x+min_dist > x_loc and room_x+min_dist < check_x ) 
+                    or (room_y+min_dist > y_loc and room_y+min_dist < check_y) 
+                    or (check_x+min_dist > room['x_loc'] and check_x+min_dist < room_x) 
+                    or (check_y+min_dist > room['y_loc']) and (check_y+min_dist < room_y)):
+                        print('Room Conflict')
                         conflict = True
                         break
-                loop_count++
+                loop_count+=1
 
         else:
             x_loc = random.randint(0, mapWidth-width)
             y_loc = random.randint(0, mapHeight-height)
 
         # store data
+        print('width, height, x, y', width, height, x_loc, y_loc)
         room_data.append({'width': width, 'height': height, 'x_loc': x_loc, 'y_loc': y_loc})
         print('Added room to data')
     return room_data
