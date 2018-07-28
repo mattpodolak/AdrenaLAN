@@ -13,6 +13,6 @@ def loadEnemies(room_arr, num_enemies):
             start_counter = start_counter + 1
             x_pos = random.randint(random_room['x_loc'], random_room['x_loc'] + random_room['width'] -1)
             y_pos = random.randint(random_room['y_loc'], random_room['y_loc'] + random_room['height'] -1)
-            enemy_arr.append({'x_loc' : x_pos, 'y_loc' : y_pos})
+            enemy_arr.append({'x_loc' : x_pos, 'y_loc' : y_pos, 'health' : 4})
     print('Enemies Loaded:', start_counter)
     return enemy_arr

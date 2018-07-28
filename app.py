@@ -100,7 +100,7 @@ for path in paths:
         pass
 
 # LOAD ENEMIES
-enemyArr = enemy_gen.loadEnemies(rooms, 8)
+enemyArr = enemy_gen.loadEnemies(rooms, max_rooms * 2)
 for enemy in enemyArr:
      print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'])
 
