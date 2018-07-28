@@ -1,4 +1,4 @@
-import sys, pygame, map_gen
+import sys, pygame, map_gen, path_gen
 import numpy as np
 import pygame.surfarray as surfarray
 
@@ -63,6 +63,20 @@ for room in rooms:
     mapArr[x-1:x2+1, y-1:y2+1] = 2
     # 0 is floor
     mapArr[x:x2, y:y2] = 0
+
+# add paths
+print('______________________________________________')
+print('Generating paths')
+paths = path_gen.generatePaths(rooms)
+
+print('Loading paths onto map')
+print(paths)
+for path in paths:
+    print(path)
+    x = path['x_loc']
+    y = path['y_loc']
+    mapArr[x, y] = 0
+
 
 # Create graphical window
 screen = pygame.display.set_mode(size)

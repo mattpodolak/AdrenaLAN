@@ -1,45 +1,6 @@
 import numpy as np
 import math
 
-
-myArr = [
-    {
-        'x_loc' : 100,
-        'y_loc' : 100,
-        'width' : 10,
-        'height' : 10,
-        'connected' : False
-    },
-    {
-        'x_loc' : 170,
-        'y_loc' : 150,
-        'width' : 10,
-        'height' : 10,
-        'connected' : False
-    },
-    {
-        'x_loc' : 300,
-        'y_loc' : 300,
-        'width' : 10,
-        'height' : 10,
-        'connected' : False
-    },
-    {
-        'x_loc' : 250,
-        'y_loc' : 250,
-        'width' : 10,
-        'height' : 10,
-        'connected' : False
-    },   
-    {
-        'x_loc' : 60,
-        'y_loc' : 250,
-        'width' : 10,
-        'height' : 10,
-        'connected' : False
-    },   
-]
-
 # generate all paths
 def generatePaths(room_arr):
     # loop through each room
@@ -73,13 +34,13 @@ def generatePaths(room_arr):
         print('START POINT   X: ', room_arr[i]['x_loc'], ' Y: ', room_arr[i]['y_loc'], ' W: ', room_arr[i]['width'], 'H: ', room_arr[i]['height'])
         print('CLOSEST POINT X: ', closestRoom['x_loc'], ' Y: ', closestRoom['y_loc'], ' W: ', closestRoom['width'], 'H: ', closestRoom['height'])
         print('DISTANCE: ', minDist)
-        path_arr.append(roomPath(room_arr[i], closestRoom))
+        path_arr=roomPath(room_arr[i], closestRoom)
         print('______________________________________________')
     
 
 
     
-    # return path_arr
+    return path_arr
 
 # calculates distance between 2 points
 def roomDist(roomA_x, roomA_y, roomB_x, roomB_y):
@@ -175,13 +136,8 @@ def roomPath(roomA, roomB):
                 elif B_direction == 'right':
                     path_arr.append({'x_loc' : start_B['x_loc'] + i, 'y_loc' : start_B['y_loc']})
 
-        # return path_arr
+        return path_arr
 
-print('generating paths...')
-generatePaths(myArr)
-print('wow no errors')
-# print(myArr)
-       
 
 
 

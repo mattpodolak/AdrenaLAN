@@ -75,7 +75,7 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
 
         # store data
         print('width, height, x, y', width, height, x_loc, y_loc)
-        room_data.append({'width': width, 'height': height, 'x_loc': x_loc, 'y_loc': y_loc})
+        room_data.append({'width': width, 'height': height, 'x_loc': x_loc, 'y_loc': y_loc, 'connected': False})
         print('Added room to data')
     return room_data
 
