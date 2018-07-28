@@ -1,6 +1,7 @@
 import numpy as np
 import math
 
+# generate all paths
 def generatePaths(room_arr, num_path, path_width, map_width, map_height):
     # loop through each room
     path_arr = []
@@ -26,59 +27,103 @@ def generatePaths(room_arr, num_path, path_width, map_width, map_height):
         path_arr.append(roomPath(room_arr[i], closestRoom))
     return path_arr
 
+# calculates distance between 2 points
 def roomDist(roomA_x, roomA_y, roomB_x, roomB_y):
-    # calculate distance
     distX = math.pow(roomA_x - roomB_x, 2)
     distY = math.pow(roomA_y - roomB_y, 2)
     return math.sqrt(distX + distY)
 
+
+# creates the shortest path between roomA and roomB
 def roomPath(roomA, roomB):
         path_arr = []
-        
-        # find start point for roomA
+        A_direction = ''
+        B_direction = ''
+
+        # find START POINT for A
         roomA_middleX = roomA['x_loc'] + (roomA['width'] // 2)
         roomA_middleY = roomA['y_loc'] + (roomA['height'] // 2)
-        # top
         a_top = roomDist(roomA_middleX, roomA['y_loc'], roomB['x_loc'], roomB['y_loc'])
-        # bottom
         a_bottom = roomDist(roomA_middleX, roomA['y_loc'] - roomA['height'], roomB['x_loc'], roomB['y_loc'])
-        # left
         a_left = roomDist(roomA['x_loc'], roomA_middleY, roomB['x_loc'], roomB['y_loc'])
-        # right
         a_right = roomDist(roomA['x_loc'] + roomA['width'], roomA_middleY, roomB['x_loc'], roomB['y_loc'])
         if min(a_top, a_bottom, a_left, a_right) == a_top:
-            # top is start point
             start_A = ({'x_loc' : roomA_middleX, 'y_loc' : roomA['y_loc']})
+            A_direction = 'top'
         elif min(a_top, a_bottom, a_left, a_right) == a_bottom:
             start_A = ({'x_loc' : roomA_middleX, 'y_loc' : roomA['y_loc'] - roomA['height']})
+            A_direction = 'bottom'
         elif min(a_top, a_bottom, a_left, a_right) == a_left:
             start_A = ({'x_loc' : roomA['x_loc'], 'y_loc' : roomA_middleY})
+            A_direction = 'left'
         elif min(a_top, a_bottom, a_left, a_right) == a_right:
             start_A = ({'x_loc' : roomA['x_loc'] + roomA['width'], 'y_loc' : roomA_middleY})
+            A_direction = 'right'
 
 
-        # find start point for roomB
+        # find END POINT for B
         roomB_middleX = roomB['x_loc'] + (roomB['width'] // 2)
         roomB_middleY = roomB['y_loc'] + (roomB['height'] // 2)
-        # top
         b_top = roomDist(roomA['x_loc'], roomA['y_loc'], roomB_middleX, roomB['y_loc'])
-        # bottom
         b_bottom = roomDist(roomA['x_loc'], roomA['y_loc'], roomB_middleX, roomB['y_loc'] - roomB['height'])
-        # left
         b_left = roomDist(roomA['x_loc'], roomA['y_loc'], roomB['x_loc'], roomB_middleY)
-        # right
         b_right = roomDist(roomA['x_loc'], roomA['y_loc'], roomB['x_loc'] + roomB['width'],  roomB_middleY)
         if min(b_top, b_bottom, b_left, b_right) == b_top:
-            # top is start point
             start_B = ({'x_loc' : roomB_middleX, 'y_loc' : roomB['y_loc']})
+            B_direction = 'top'
         elif min(b_top, b_bottom, b_left, b_right) == b_bottom:
             start_B = ({'x_loc' : roomB_middleX, 'y_loc' : roomB['y_loc'] - roomB['height']})
+            B_direction = 'bottom'
         elif min(b_top, b_bottom, b_left, b_right) == b_left:
             start_B = ({'x_loc' : roomB['x_loc'], 'y_loc' : roomB_middleY})
+            B_direction = 'left'
         elif min(b_top, b_bottom, b_left, b_right) == b_right:
-            start_B = ({'x_loc' : roomB['x_loc'] + roomB['width'], 'y_loc' : roomB_middleY}) 
+            start_B = ({'x_loc' : roomB['x_loc'] + roomB['width'], 'y_loc' : roomB_middleY})
+            B_direction = 'right' 
 
-        # find end point
+        # X and Y VALUES
+        x_val = abs(start_A['x_loc'] - start_B['x_loc'])
+        y_val = abs(start_A['y_loc'] - start_B['y_loc'])
+
+        # CONNECT A TO MIDDLE
+        if (A_direction == 'top' or A_direction == 'bottom'):
+            for i in range(0, y_val + 1):
+                if A_direction == 'top':
+                    path_arr.append({'x_loc' : start_A['x_loc'], 'y_loc' : start_A['y_loc'] + i})
+                elif A_direction == 'bottom':
+                    path_arr.append({'x_loc' : start_A['x_loc'], 'y_loc' : start_A['y_loc'] - i})
+        elif (A_direction == 'left' or A_direction == 'right'):
+            for i in range(0, x_val + 1):
+                if A_direction == 'left':
+                    path_arr.append({'x_loc' : start_A['x_loc'] - i, 'y_loc' : start_A['y_loc']})
+                elif A_direction == 'right':
+                    path_arr.append({'x_loc' : start_A['x_loc'] + i, 'y_loc' : start_A['y_loc']})
+
+        # CONNECT B TO MIDDLE
+        if (B_direction == 'top' or B_direction == 'bottom'):
+            for i in range(0, y_val + 1):
+                if B_direction == 'top':
+                    path_arr.append({'x_loc' : start_B['x_loc'], 'y_loc' : start_B['y_loc'] + i})
+                elif B_direction == 'bottom':
+                    path_arr.append({'x_loc' : start_B['x_loc'], 'y_loc' : start_B['y_loc'] - i})
+        elif (B_direction == 'left' or B_direction == 'right'):
+            for i in range(0, x_val + 1):
+                if B_direction == 'left':
+                    path_arr.append({'x_loc' : start_B['x_loc'] - i, 'y_loc' : start_B['y_loc']})
+                elif B_direction == 'right':
+                    path_arr.append({'x_loc' : start_B['x_loc'] + i, 'y_loc' : start_B['y_loc']})
+
+        return path_arr
+
+
+
+        
+       
+
+
+
+        
+
 
 
 
