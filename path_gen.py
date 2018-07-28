@@ -107,8 +107,7 @@ def roomPath(roomA, roomB):
         print('BASE:', x_val)
         print('HEIGHT', y_val)
 
-
-       
+       # Connect A and B
         for i in range(x_val+1):
             # A is more left
             if(start_A['x_loc'] <= start_B['x_loc']):
@@ -130,6 +129,7 @@ def roomPath(roomA, roomB):
                         path_arr.append({'x_loc' : ini_startb, 'y_loc' : start_A['y_loc'] - j})
                     else:
                         path_arr.append({'x_loc' : ini_startb, 'y_loc' : start_A['y_loc'] + j})
+       
         return path_arr
 
 

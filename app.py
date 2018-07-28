@@ -69,10 +69,8 @@ print('______________________________________________')
 print('Generating paths')
 paths = path_gen.generatePaths(rooms)
 
-count = 0
 print('Loading paths onto map')
 for path in paths:
-    count = count + 1
     x = path['x_loc']
     y = path['y_loc']
     mapArr[x, y] = 0
