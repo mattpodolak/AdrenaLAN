@@ -10,12 +10,12 @@ pygame.init()
 GENERATION VARIABLES
 
 '''
-map_min_width = 82
-map_max_width = 120
-map_min_height = 82
-map_max_height = 120
+map_min_width = 60
+map_max_width = 70
+map_min_height = 60
+map_max_height = 70
 min_rooms = 5
-max_rooms = 10
+max_rooms = 8
 min_size = 4
 max_size = 8
 min_dist_bw_rooms = 2
@@ -29,15 +29,20 @@ DISPLAY VARIABLES
 unit_size = 32
 
 white = 1, 1, 1
+black = 0, 0, 0
 
-# window pixel and unit dimensions
-window_x_units = 20
-window_y_units = 20
-window_x = window_x_units * unit_size
-window_y = window_y_units * unit_size
+# window location
+window_x_units = 0
+window_y_units = 0
+
+# window size with pixels and units
+window_width_units = 40
+window_height_units = 20
+window_width = window_width_units * unit_size
+window_height = window_height_units * unit_size
 
 # window size
-size = window_x, window_y
+size = window_width, window_height
 
 
 mapArr = map_gen.generateMap(map_min_width, map_max_width, map_min_height, map_max_height)
@@ -65,15 +70,61 @@ screen.fill(white)
 wall = pygame.image.load("assets/wall/default-wall.bmp")
 floor = pygame.image.load("assets/floor/default-floor.bmp")
 
-# create rectangles
-for x in range(0, window_x_units):
-    for y in range(0, window_y_units):
-        if(mapArr[x, y] == 2):
-            #print('Drawing wall')
-            screen.blit(wall, (x*unit_size, y*unit_size, unit_size, unit_size))
-        elif(mapArr[x, y] == 0):
-            #print('Drawing floor')
-            screen.blit(floor, (x*unit_size, y*unit_size, unit_size, unit_size))
+def renderMap():
+    #Clear screen
+    screen.fill(black)
+    # create rectangles
+    for x in range(window_x_units, window_width_units+window_x_units):
+        for y in range(window_y_units, window_height_units+window_y_units):
+            # shift graphics depending on window location
+            new_x = x-window_x_units
+            new_y = y-window_y_units
+            if(mapArr[x, y] == 2):
+                #print('Drawing wall')
+                screen.blit(wall, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+            elif(mapArr[x, y] == 0):
+                #print('Drawing floor')
+                screen.blit(floor, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+
+renderMap()
+
+def moveScreen(keyWASD):
+    global window_x_units
+    global window_y_units
+
+    if(keyWASD == 'w'):
+        # check if move is possible
+        if(window_y_units > 0):
+            window_y_units-=1
+            renderMap()
+        else:
+            print('Cant move that direction')
+
+    elif(keyWASD == 'a'):
+        # check if move is possible
+        if(window_x_units > 0):
+            window_x_units-=1
+            renderMap()
+        else:
+            print('Cant move that direction')
+
+    elif(keyWASD == 's'):
+        # check if move is possible
+        if(window_y_units + window_height_units < mapHeight):
+            window_y_units+=1
+            renderMap()
+        else:
+            print('Cant move that direction')
+
+    elif(keyWASD == 'd'):
+        # check if move is possible
+        if(window_x_units + window_width_units < mapWidth):
+            window_x_units+=1
+            renderMap()
+        else:
+            print('Cant move that direction')
+
+
 
 
 
