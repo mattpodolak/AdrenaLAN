@@ -15,8 +15,8 @@ def gen_start(rooms):
     y = room['y_loc']
     y2 = y+room['height']
 
-    start_x = random.randint(x, x2)
-    start_y = random.randint(y, y2)
+    start_x = random.randint(x, x2-1)
+    start_y = random.randint(y, y2-1)
     print('Start x, y ', start_x, start_y)
 
     return start_x, start_y, room_pick
@@ -39,8 +39,8 @@ def gen_end(rooms, start_room):
     y = room['y_loc']
     y2 = y+room['height']
 
-    end_x = random.randint(x, x2)
-    end_y = random.randint(y, y2)
+    end_x = random.randint(x, x2-1)
+    end_y = random.randint(y, y2-1)
     print('End x, y ', end_x, end_y)
 
     return end_x, end_y

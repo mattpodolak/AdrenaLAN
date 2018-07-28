@@ -45,9 +45,15 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
                     height = min_size
                 
                 if loop_count == 10:
-                    print('ITS NOT WORKING, making size 1 room')
-                    width = 1
-                    height = 1
+                    if(width != 1 and height != 1):
+                        print('ITS NOT WORKING, making smaller')
+                        width-=1
+                        height-=1
+                        # reset count
+                        loop_count = 5
+                    else:
+                        print('CONFLICTED INTO SMALLEST ROOM')
+                    
 
                 # check previous locations for conflicts
                 for room in room_data:
