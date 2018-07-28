@@ -190,37 +190,49 @@ renderMap()
 def moveScreen(keyWASD):
     global window_x_units
     global window_y_units
+    global char_x_rel
+    global char_y_rel
 
     if(keyWASD == 'w'):
         # check if move is possible
-        if(window_y_units > 0):
+        if(window_y_units > 0 and char_y_rel == window_height_units//2):
             window_y_units-=1
             renderMap()
         elif(validMove('w')):
-            
+            char_y_rel-=1
+            renderMap()
         else:
             print('Cant move that direction')
 
     elif(keyWASD == 'a'):
         # check if move is possible
-        if(window_x_units > 0):
+        if(window_x_units > 0 and char_x_rel == window_width_units//2):
             window_x_units-=1
+            renderMap()
+        elif(validMove('a')):
+            char_x_rel-=1
             renderMap()
         else:
             print('Cant move that direction')
 
     elif(keyWASD == 's'):
         # check if move is possible
-        if(window_y_units + window_height_units < mapHeight):
+        if(window_y_units + window_height_units < mapHeight and char_y_rel == window_height_units//2):
             window_y_units+=1
+            renderMap()
+        elif(validMove('s')):
+            char_y_rel+=1
             renderMap()
         else:
             print('Cant move that direction')
 
     elif(keyWASD == 'd'):
         # check if move is possible
-        if(window_x_units + window_width_units < mapWidth):
+        if(window_x_units + window_width_units < mapWidth and char_x_rel == window_width_units//2):
             window_x_units+=1
+            renderMap()
+        elif(validMove('d')):
+            char_x_rel+=1
             renderMap()
         else:
             print('Cant move that direction')
