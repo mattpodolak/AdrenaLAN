@@ -10,7 +10,7 @@ def path(rooms):
         y = room['y_loc']
         width = room['width']
         height = room['height']
-        num_paths = random.randint(1, 2)
+        num_paths = random.randint(1, 3)
         # find 1 or 2 closest rooms
         near_rooms = minDist(room, rooms)
 
@@ -82,7 +82,7 @@ def path(rooms):
                         end_pt_y = y2-1+height2
                         end_pt_x = random.randint(x2+1, x2+width2-1)
                     pathArr = createPath(pathArr, 'left', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
-
+            
             if num_paths == 1:
                 break
 
@@ -91,9 +91,9 @@ def path(rooms):
 
 # calculates distance between 2 points
 def minDist(room, rooms):
-    min_dist1 = 10000
+    max_dist1 = 0
     min_dist2 = 20000
-    min_room1 = room
+    max_room1 = room
     min_room2 = room
     x = room['x_loc']
     y = room['y_loc']
@@ -111,18 +111,14 @@ def minDist(room, rooms):
             dist = math.sqrt(distX + distY)
 
             # update variables
-            if dist < min_dist1:
-                min_dist2 = min_dist1
-                min_dist1 = dist
-
-                min_room2 = min_room1
-                min_room1 = rooms[i]
-            elif dist < min_dist2:
+            if dist > max_dist1:
+                max_dist1 = dist
+                max_room1 = rooms[i]
+            if dist < min_dist2:
                 min_dist2 = dist
-
                 min_room2 = rooms[i]
     near_rooms = []
-    near_rooms.append(min_room1)
+    near_rooms.append(max_room1)
     near_rooms.append(min_room2)
     return near_rooms
 

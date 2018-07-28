@@ -116,8 +116,8 @@ def renderMap():
     #Clear screen
     screen.fill(black)
     # create rectangles
-    for x in range(window_x_units, window_width_units+window_x_units):
-        for y in range(window_y_units, window_height_units+window_y_units):
+    for x in range(window_x_units, window_width_units+window_x_units-1):
+        for y in range(window_y_units, window_height_units+window_y_units-1):
             # shift graphics depending on window location
             new_x = x-window_x_units
             new_y = y-window_y_units
@@ -137,7 +137,7 @@ def renderMap():
 
     # draw enemies
     for enemy in enemyArr:
-        screen.blit(starfish, (enemy['x_loc']*unit_size, enemyArr['y_loc']*unit_size, unit_size, unit_size))
+        screen.blit(starfish, (enemy['x_loc']*unit_size, enemy['y_loc']*unit_size, unit_size, unit_size))
 
 renderMap()
 
