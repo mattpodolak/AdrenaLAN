@@ -10,7 +10,7 @@ def generateMap(min_width, max_width, min_height, max_height):
     mapWidth = random.randint(min_width, max_width+1)
     mapHeight = random.randint(min_height, max_height+1)    
 
-    # create array of 1s, dimensions equal map size (1 represents wall, 0 is floor, 2 is start, 3 is goal)
+    # create array of 1s, dimensions equal map size (1 represents nothing, 0 is floor, 2 is wall)
     mapArr = np.ones((mapWidth, mapHeight), dtype=int)
     return mapArr 
 
@@ -36,8 +36,8 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
 
             while conflict == True:
                 conflict = False
-                x_loc = random.randint(0, mapWidth-width)
-                y_loc = random.randint(0, mapHeight-height)
+                x_loc = random.randint(2, mapWidth-width-1)
+                y_loc = random.randint(2, mapHeight-height-1)
 
                 if loop_count == 5:
                     print('OH NO! making room smallest size')
@@ -58,7 +58,12 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
                     if ((room_x+min_dist > x_loc and room_x+min_dist < check_x ) 
                     or (room_y+min_dist > y_loc and room_y+min_dist < check_y) 
                     or (check_x+min_dist > room['x_loc'] and check_x+min_dist < room_x) 
-                    or (check_y+min_dist > room['y_loc']) and (check_y+min_dist < room_y)):
+                    or (check_y+min_dist > room['y_loc'] and check_y+min_dist < room_y)
+                    or (room['x_loc'] < x_loc and room_x > check_x and room['y_loc'] > y_loc and room['y_loc'] < check_y)
+                    or (room['y_loc'] < y_loc and room_y > check_y and room['x_loc'] > x_loc and room['x_loc'] < check_x)
+                    or (room['x_loc'] > x_loc and room_x < check_x and room['y_loc'] < y_loc and room['y_loc'] > check_y)
+                    or (room['y_loc'] > y_loc and room_y < check_y and room['x_loc'] < x_loc and room['x_loc'] > check_x)
+                    ):
                         print('Room Conflict')
                         conflict = True
                         break
