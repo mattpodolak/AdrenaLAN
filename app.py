@@ -84,6 +84,20 @@ while 1:
         if event.type == pygame.QUIT: 
             print('Exiting..')
             sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            # button is being pressed
+            if event.key == pygame.K_w:
+                print('Pressed w')
+                moveScreen('w')
+            elif event.key == pygame.K_s:
+                print('Pressed s')
+                moveScreen('s') 
+            elif event.key == pygame.K_a:
+                print('Pressed a')
+                moveScreen('a') 
+            elif event.key == pygame.K_d:
+                print('Pressed d')
+                moveScreen('d') 
     
     #Make drawn items appear
     pygame.display.flip()
