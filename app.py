@@ -73,6 +73,17 @@ char_x_rel = window_width_units//2
 char_y_rel = window_height_units//2
 
 # adjust screen to focus on character
+# ensure screen isnt pushed out of area
+if(char_x < char_x_rel):
+    char_x_rel = char_x
+if(char_y < char_y_rel):
+    char_y_rel = char_y
+
+if(char_x+char_x_rel>= mapWidth):
+    char_x_rel - mapWidth + window_width_units
+if(char_y+char_y_rel>= mapHeight):
+    char_y_rel - mapHeight + window_height_units
+
 window_x_units = char_x - char_x_rel
 window_y_units = char_y - char_y_rel
 
