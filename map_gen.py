@@ -60,8 +60,9 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
             x_loc = random.randint(0, mapWidth-width)
             y_loc = random.randint(0, mapHeight-height)
 
-        # pick location with no conflicts, further than min dist away from nearest room
-        # if conflicts make room smaller
-        room_data.append({width})
+        # store data
+        room_data.append({'width': width, 'height': height, 'x_loc': x_loc, 'y_loc': y_loc})
+        print('Added room to data')
+    return room_data
 
 
