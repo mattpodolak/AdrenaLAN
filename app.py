@@ -1,9 +1,12 @@
 import sys, pygame, map_gen, path_gen2, start_end, enemy_gen
 import numpy as np
 import pygame.surfarray as surfarray
+import pygame
 
 #pylint shows as an errror
 pygame.init()
+pygame.font.init()
+myfont = pygame.font.SysFont('Comic Sans MS', 12)
 
 '''
 
@@ -104,7 +107,7 @@ for path in paths:
 # LOAD ENEMIES
 enemyArr = enemy_gen.loadEnemies(rooms, max_rooms * 2)
 for enemy in enemyArr:
-     print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'])
+     print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'], 'ATT:', enemy['att'], 'HP:', enemy['hp'])
 
 
 # Create graphical window
@@ -143,9 +146,13 @@ def renderMap():
 
     # draw enemies
     for enemy in enemyArr:
+        showStats_HP = myfont.render('HP: '+str(enemy['hp']), 1, (0, 255, 0))
+        showStats_ATT = myfont.render('ATT: '+str(enemy['att']), 1, (255, 0, 0))
         new_x = enemy['x_loc']-window_x_units
         new_y = enemy['y_loc']-window_y_units
         screen.blit(starfish, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+        screen.blit(showStats_HP, (new_x*unit_size - (1.2*unit_size), new_y*unit_size - (0.8*unit_size)))
+        screen.blit(showStats_ATT, (new_x*unit_size + (0.6*unit_size), new_y*unit_size - (0.8*unit_size)))
 
 renderMap()
 
