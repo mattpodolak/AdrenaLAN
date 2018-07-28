@@ -135,6 +135,10 @@ def renderMap():
     # draw character
     screen.blit(char, (char_x_rel*unit_size, char_y_rel*unit_size, unit_size, unit_size))
 
+    # draw enemies
+    for enemy in enemyArr:
+        screen.blit(starfish, (enemy['x_loc']*unit_size, enemyArr['y_loc']*unit_size, unit_size, unit_size))
+
 renderMap()
 
 def moveScreen(keyWASD):
