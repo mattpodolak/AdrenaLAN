@@ -5,6 +5,7 @@ import random
 def path(rooms):
     pathArr = []
     for room in rooms:
+        print('room')
         x = room['x_loc']
         y = room['y_loc']
         width = room['width']
@@ -24,55 +25,63 @@ def path(rooms):
             delt_y = y2-y
 
             if(abs(delt_y) < abs(delt_x)):
+                print('hello')
                 if(delt_y > 0):
                     # start on bottom, pick pixel to start at
                     start_pt_x = random.randint(x+1, x-1+width)
-                    start_pt_y = y+height+1
+                    start_pt_y = y+height
                     if delt_x > 0:
                         # land on left of block 2
-                        end_pt_x = x2-1
+                        end_pt_x = x2
                         end_pt_y = random.randint(y2+1, y2+height2-1)
+                        pathArr = createPath(pathArr, 'bottom', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
                     else:
                         # land on right
-                        end_pt_x = x2+1+width2
+                        end_pt_x = x2+width2-1
                         end_pt_y = random.randint(y2+1, y2+height2-1)
-                    pathArr = createPath(pathArr, 'bottom', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
+                        pathArr = createPath(pathArr, 'bottom', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
                 else:
                     # start on top, pick pixel to start at
                     start_pt_x = random.randint(x+1, x-1+width)
-                    end_pt_x = random.randint(x2+1, x2-1+width2)
-                    start_pt_y = y-1
-                    end_pt_y = y2+height2+1
-                    pathArr = createPath(pathArr, 'top', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
+                    start_pt_y = y
+                    if delt_x > 0:
+                        # land on left of block 2
+                        end_pt_x = x2
+                        end_pt_y = random.randint(y2+1, y2+height2-1)
+                        pathArr = createPath(pathArr, 'top', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
+                    else:
+                        # land on right
+                        end_pt_x = x2+width2-1
+                        end_pt_y = random.randint(y2+1, y2+height2-1)
+                        pathArr = createPath(pathArr, 'top', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
             else:
+                print('Hello')
                 if(delt_x > 0):
                     # start on right, pick pixel to start at
                     start_pt_y = random.randint(y+1, y+height-1)
-                    start_pt_x = x+width+1
+                    start_pt_x = x+width-1
                     if delt_y > 0:
                         # land on top of block 2
-                        end_pt_y = y2-1
+                        end_pt_y = y2
                         end_pt_x = random.randint(x2+1, x2+width2-1)
                     else:
                         # land on bottom
-                        end_pt_y = y2+1+height2
+                        end_pt_y = y2+height2-1
                         end_pt_x = random.randint(x2+1, x2+width2-1)
                     pathArr = createPath(pathArr, 'right', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
                 else:
                     # start on left, pick pixel to start at
                     start_pt_y = random.randint(y+1, y-1+height)
-                    start_pt_x = x-1
+                    start_pt_x = x
                     if delt_y > 0:
                         # land on top of block 2
-                        end_pt_y = y2-1
+                        end_pt_y = y2
                         end_pt_x = random.randint(x2+1, x2+width2-1)
                     else:
                         # land on bottom
-                        end_pt_y = y2+1+height2
+                        end_pt_y = y2-1+height2
                         end_pt_x = random.randint(x2+1, x2+width2-1)
                     pathArr = createPath(pathArr, 'left', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
-            print('Path start pt ', start_pt_x, start_pt_y)
-            print('Path end pt ', end_pt_x, end_pt_y)  
 
             if num_paths == 1:
                 break
@@ -142,12 +151,12 @@ def createPath(pathArr, startSide, start_x, start_y, end_x, end_y):
                 pathArr.append({'x_loc': var, 'y_loc':end_y})
         else:
             for i in range(0, start_x-end_x):
-                var = end_x+i
+                var = start_x-i
                 pathArr.append({'x_loc': var, 'y_loc':end_y})
 
     elif startSide == 'right':
         for i in range(0, end_x-start_x):
-            var = start_x+i
+            var = end_x-i
             pathArr.append({'x_loc': var, 'y_loc':start_y})
         if end_y > start_y:
             for i in range(0, end_y-start_y):

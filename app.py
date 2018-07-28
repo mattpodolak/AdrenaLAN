@@ -1,4 +1,4 @@
-import sys, pygame, map_gen, path_gen, start_end
+import sys, pygame, map_gen, path_gen2, start_end
 import numpy as np
 import pygame.surfarray as surfarray
 
@@ -90,13 +90,16 @@ window_y_units = char_y - char_y_rel
 # add paths
 print('______________________________________________')
 print('Generating paths')
-paths = path_gen.generatePaths(rooms)
+paths = path_gen2.path(rooms)
 
 print('Loading paths onto map')
 for path in paths:
     x = path['x_loc']
     y = path['y_loc']
     mapArr[x, y] = 0
+
+# LOAD ENEMIES
+enemyArr = []
 
 
 # Create graphical window
@@ -107,6 +110,7 @@ wall = pygame.image.load("assets/wall/default-wall.bmp")
 floor = pygame.image.load("assets/floor/default-floor.bmp")
 char = pygame.image.load("assets/character/knight.png")
 goal = pygame.image.load("assets/floor/goal.png")
+starfish = pygame.image.load("assets/enemy/starfish.png")
 
 def renderMap():
     #Clear screen
