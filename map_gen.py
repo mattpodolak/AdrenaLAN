@@ -27,8 +27,8 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
     for i in range(0, num_rooms):
         print('Making: Room ', i)
         # pick width and height
-        width = random.randint(min_size, max_size+1)
-        height = random.randint(min_size, max_size+1)
+        width = random.randint(min_size, max_size)
+        height = random.randint(min_size, max_size)
 
         if i != 0:
             conflict = True
@@ -36,8 +36,8 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
 
             while conflict == True:
                 conflict = False
-                x_loc = random.randint(2, mapWidth-width-1)
-                y_loc = random.randint(2, mapHeight-height-1)
+                x_loc = random.randint(2, mapWidth-width-3)
+                y_loc = random.randint(2, mapHeight-height-3)
 
                 if loop_count == 5:
                     print('OH NO! making room smallest size')
@@ -45,9 +45,15 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
                     height = min_size
                 
                 if loop_count == 10:
-                    print('ITS NOT WORKING, making size 1 room')
-                    width = 1
-                    height = 1
+                    if(width != 1 and height != 1):
+                        print('ITS NOT WORKING, making smaller')
+                        width-=1
+                        height-=1
+                        # reset count
+                        loop_count = 5
+                    else:
+                        print('CONFLICTED INTO SMALLEST ROOM')
+                    
 
                 # check previous locations for conflicts
                 for room in room_data:
@@ -55,7 +61,9 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
                     room_y = room['y_loc']+room['height']
                     check_x = x_loc+width
                     check_y = y_loc+height
-                    if ((room_x+min_dist > x_loc and room_x+min_dist < check_x ) 
+                    if (((room['x_loc'] >= x_loc and room['x_loc'] <= check_x ) and (room['y_loc'] >= y_loc and room['y_loc'] <= check_y ))
+                    or ((room['x_loc'] <= x_loc and room_x >= x_loc ) and (room['y_loc'] <= y_loc and room_y >= y_loc ))
+                    or(room_x+min_dist > x_loc and room_x+min_dist < check_x ) 
                     or (room_y+min_dist > y_loc and room_y+min_dist < check_y) 
                     or (check_x+min_dist > room['x_loc'] and check_x+min_dist < room_x) 
                     or (check_y+min_dist > room['y_loc'] and check_y+min_dist < room_y)
@@ -70,8 +78,8 @@ def generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist, mapWidth, 
                 loop_count+=1
 
         else:
-            x_loc = random.randint(0, mapWidth-width)
-            y_loc = random.randint(0, mapHeight-height)
+            x_loc = random.randint(2, mapWidth-width-3)
+            y_loc = random.randint(2, mapHeight-height-3)
 
         # store data
         print('width, height, x, y', width, height, x_loc, y_loc)
