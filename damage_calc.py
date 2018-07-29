@@ -1,6 +1,7 @@
 import random
 
-def attackSurround(player, monster_arr):
+def attackSurround(player, monster_arr, console):
+    fail_move = ['You hit nothing...', 'Wow the air felt that one...', 'You should get your eyes checked mate.', 'What are you looking for?']
     enemy_around = []
     char_x = player['x_loc']
     char_y = player['y_loc']
@@ -10,7 +11,9 @@ def attackSurround(player, monster_arr):
             enemy_around.append(enemy)
     # damage all enemies
     for enemy_near in enemy_around:
-        damageTaken(enemy_near, player)
+        damageTaken(enemy_near, player, console)
+    if not enemy_around:
+        console.append(random.choice(fail_move))
 
 
 # calculates dmg done to a player
@@ -32,7 +35,7 @@ def attack(enemy, player, monster_arr):
     # print('HP:', player['hp'])
 
 # calculates dmg done to an enemy
-def damageTaken(monster, player):
+def damageTaken(monster, player, console):
     if monster['hp'] > 0:
         base_att = player['att']
         def_rating = int(abs(monster['def'])) / 10
@@ -45,7 +48,7 @@ def damageTaken(monster, player):
         if def_rating == 0:
             def_rating = 0.5
         damage = (base_att * crit_multiplier) * def_rating
-        print(damage, 'damage dealt.')
+        console.append(str(damage) + ' damage dealt to' +  str(monster['name']))
         
         monster['hp'] = monster['hp'] - damage
 
@@ -53,7 +56,7 @@ def damageTaken(monster, player):
             # monster dead
             monster['hp'] = 0
             player['xp'] = player['xp'] + monster['xp']
-            print('You gained', monster['xp'], 'experience.')
+            console.append('You gained ' +  str(monster['xp']) + ' experience. Total XP: ' + str(player['xp']))
             # temp_monster_arr = [enemy for enemy in monster_arr if enemy != monster]
             # monster_arr = temp_monster_arr
 
