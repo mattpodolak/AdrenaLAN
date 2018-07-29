@@ -19,7 +19,7 @@ def path(rooms):
             y2 = near_room['y_loc']
             width2 = near_room['width']
             height2 = near_room['height']
-            print(near_room)
+            #print(near_room)
 
             # pick side to start path
             delt_x = x2-x

@@ -17,9 +17,9 @@ def attackSurround(player, monster_arr, console):
 
 
 # calculates dmg done to a player
-def attack(enemy, player, monster_arr):
+def attack(enemy, player, console):
     base_att = enemy['att']
-    def_rating = (int(player['def']) / 10)
+    def_rating = (int(player['def']) / 12)
     chance = random.randint(0, 100)
     if chance <= enemy['crit_chc']:
         # crit occurs
@@ -31,8 +31,8 @@ def attack(enemy, player, monster_arr):
     else:
         damage = round((base_att * crit_multiplier) * (def_rating), 2)
     player['hp'] = player['hp'] - damage
-    # print('You took', damage, 'damage from', enemy['name'], '!')
-    # print('HP:', player['hp'])
+    console.append({'log' : 'You took ' + str(damage) + ' damage from ' + enemy['name'] + '!', 'id' : 3})
+    console.append({'log' : 'HP: ' + str(float("{0:.2f}".format(player['hp']))), 'id' : 4})
 
 # calculates dmg done to an enemy
 def damageTaken(monster, player, console):
@@ -57,13 +57,3 @@ def damageTaken(monster, player, console):
             monster['hp'] = 0
             player['xp'] = player['xp'] + monster['xp']
             console.append({'log' : ('You gained ' +  str(monster['xp']) + ' experience. Total XP: ' + str(player['xp'])), 'id' : 2})
-            # temp_monster_arr = [enemy for enemy in monster_arr if enemy != monster]
-            # monster_arr = temp_monster_arr
-
-        # print(monster['name'], 'has', monster['hp'], 'hp remaining')
-        # print(monster_arr)
-    # else:
-    #     temp_monster_arr = [enemy for enemy in monster_arr if enemy != monster]
-    #     monster_arr = temp_monster_arr
-        # print(monster_arr)
-        # print(monster['name'], 'is already dead. No attacks made.')
