@@ -1,4 +1,4 @@
-import sys, pygame, map_gen, path_gen2, start_end, enemy_gen, damage_calc
+import sys, pygame, map_gen, path_gen2, start_end, enemy_gen, damage_calc, enemy_turn
 import numpy as np
 import pygame.surfarray as surfarray
 import pygame
@@ -176,7 +176,7 @@ def checkForEnemy(x, y):
         en_x = enemy['x_loc']
         en_y = enemy['y_loc']
         if(en_x == x and en_y == y):
-            console_log.append('Enemy in the way')
+            console_log.append({'log' : 'Enemy in the way', 'id' : 0})
             damage_calc.attackSurround(hero_stats, enemyArr, console_log)
             renderMap()
             return False
@@ -254,7 +254,6 @@ def renderMap():
             # draw antifog of war
             if not ((x >= fog_x and x <= fog_x2) and (y >= fog_y and y <= fog_y2)):
                 screen.blit(fog, (x*unit_size, y*unit_size, unit_size, unit_size))
-
     # if not in the fog display
     if((new_x >= fog_x and new_x <= fog_x2)and (new_y >= fog_y and new_y <= fog_y2)):
         screen.blit(goal, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
@@ -266,11 +265,21 @@ def renderMap():
 
 
     # console log
-    for i in range(len(console_log)):
-        consoleX = hero_stats['x_loc'] - 8
+    # id 0 = passive, 1 = combat, 2 = xp
+    count = 0
+    for log in reversed(console_log):
+        consoleX = hero_stats['x_loc'] - 5
         consoleY = hero_stats['y_loc'] + 500
-        console_text = consolefont.render(console_log[-i], 1, (255, 255, 0))
-        screen.blit(console_text, (consoleX, consoleY - (i * 20)))
+        if log['id'] == 0:
+            color = (255, 255, 0)
+        elif log['id'] == 1:
+            color = (255, 0, 0)
+        elif log['id'] == 2:
+            color = (0, 191, 255)
+
+        console_text = consolefont.render(log['log'], 1, color)
+        screen.blit(console_text, (consoleX, consoleY - (count * 20)))
+        count = count + 1
 
 
     # draw enemies
@@ -288,6 +297,11 @@ def renderMap():
             elif (enemy['name'] == 'Hells Janitor'):
                 screen.blit(ogre, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
             screen.blit(showStats_HP, (new_x*unit_size + (0.1*unit_size), new_y*unit_size - (0.4*unit_size)))
+
+    # nextArr = enemy_turn.enemy_move(char_x_rel, char_y_rel, fog_size, window_x_units, window_y_units, enemyArr, mapArr)
+    # for i in range(len(nextArr)):
+    #     enemyArr[i]['x_loc'] = nextArr[i]['x_loc']
+    #     enemyArr[i]['y_loc'] = nextArr[i]['y_loc']
 
 renderMap()
 
@@ -348,7 +362,7 @@ def moveScreen(keyWASD):
 
     # attack move
     elif(keyWASD == 'p'):
-        console_log.append(random.choice(list_moves))
+        console_log.append({'log' : random.choice(list_moves), 'id' : 1})
         damage_calc.attackSurround(hero_stats, enemyArr, console_log)
         renderMap()
 

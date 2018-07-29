@@ -13,7 +13,7 @@ def attackSurround(player, monster_arr, console):
     for enemy_near in enemy_around:
         damageTaken(enemy_near, player, console)
     if not enemy_around:
-        console.append(random.choice(fail_move))
+        console.append({'log' : random.choice(fail_move), 'id' : 0})
 
 
 # calculates dmg done to a player
@@ -48,7 +48,7 @@ def damageTaken(monster, player, console):
         if def_rating == 0:
             def_rating = 0.5
         damage = (base_att * crit_multiplier) * def_rating
-        console.append(str(damage) + ' damage dealt to ' +  str(monster['name']))
+        console.append({'log' : (str(damage) + ' damage dealt to ' +  str(monster['name'])), 'id' : 1})
         
         monster['hp'] = monster['hp'] - damage
 
@@ -56,7 +56,7 @@ def damageTaken(monster, player, console):
             # monster dead
             monster['hp'] = 0
             player['xp'] = player['xp'] + monster['xp']
-            console.append('You gained ' +  str(monster['xp']) + ' experience. Total XP: ' + str(player['xp']))
+            console.append({'log' : ('You gained ' +  str(monster['xp']) + ' experience. Total XP: ' + str(player['xp'])), 'id' : 2})
             # temp_monster_arr = [enemy for enemy in monster_arr if enemy != monster]
             # monster_arr = temp_monster_arr
 
