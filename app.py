@@ -174,6 +174,7 @@ def checkForEnemy(x, y):
         en_y = enemy['y_loc']
         if(en_x == x and en_y == y):
             print('Enemy in the way')
+            damage_calc.attackSurround(hero_stats, enemyArr)
             return False
     return True
     
@@ -210,10 +211,12 @@ def validMove(move):
         
 
 def renderMap():
-
     for enemies in enemyArr:
         if enemies['hp'] == 0:
             enemyArr.remove(enemies)
+        float("{0:.2f}".format(enemies['hp']))
+        float("{0:.2f}".format(enemies['att']))
+        float("{0:.2f}".format(enemies['def']))
     #Clear screen
     screen.fill(black) 
     # if called either init / player made a move
@@ -241,13 +244,11 @@ def renderMap():
     fog_x2 = char_x_rel+fog_size
     fog_y = char_y_rel-fog_size
     fog_y2 = char_y_rel+fog_size
-    print('fx ', fog_x, ' fx2 ', fog_x2, ' fy ', fog_y, ' fy2 ', fog_y2, ' cx ', char_x_rel, ' cy ', char_y_rel)
+    # print('fx ', fog_x, ' fx2 ', fog_x2, ' fy ', fog_y, ' fy2 ', fog_y2, ' cx ', char_x_rel, ' cy ', char_y_rel)
     for x in range(0, window_width_units):
         for y in range(0, window_height_units):
             # draw antifog of war
-            if((x >= fog_x and x <= fog_x2) and (y >= fog_y and y <= fog_y2)):
-                print('something')
-            else:
+            if not ((x >= fog_x and x <= fog_x2) and (y >= fog_y and y <= fog_y2)):
                 screen.blit(fog, (x*unit_size, y*unit_size, unit_size, unit_size))
 
     # if not in the fog display
