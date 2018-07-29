@@ -56,4 +56,17 @@ def damageTaken(monster, player, console):
             # monster dead
             monster['hp'] = 0
             player['xp'] = player['xp'] + monster['xp']
-            console.append({'log' : ('You gained ' +  str(monster['xp']) + ' experience. Total XP: ' + str(player['xp'])), 'id' : 2})
+            console.append({'log' : ('You gained ' +  str(monster['xp']) + ' experience.'), 'id' : 2})
+            # display mosnter mutations
+            monster_mutations = []
+            if len(monster['mutations']) != 0:
+                for mutations in monster['mutations']:
+                    if (mutations not in monster_mutations):
+                        monster_mutations.append(str(mutations))
+                console.append({'log' : 'The ' + ' '.join(monster_mutations) + ' ' + monster['name'] + ' has been slain.', 'id' : 0})
+            else:
+                console.append({'log' : 'The Extraordinarily Normal ' + monster['name'] + ' has been slain.', 'id' : 0})
+            
+            # show att and def 
+            # + ' (' + str(monster['att']) + ',' + str(monster['def']) + ')'
+

@@ -6,6 +6,7 @@ import random
 
 #pylint shows as an errror
 pygame.init()
+pygame.display.set_caption('Dungeons And Stuff')
 pygame.font.init()
 myfont = pygame.font.SysFont('Comic Sans MS', 12)
 consolefont = pygame.font.SysFont('Comic Sans MS', 16)
@@ -192,6 +193,108 @@ while 1:
     enemyArr.extend(enemy_gen.loadEnemies(rooms, max_rooms, 'Starboi'))
     enemyArr.extend(enemy_gen.loadEnemies(rooms, round(max_rooms * 1.5), 'Demondog'))
     enemyArr.extend(enemy_gen.loadEnemies(rooms, 3, 'Hells Janitor'))
+
+# add rooms
+print('Loading rooms onto map')
+for room in rooms:
+    x = room['x_loc']
+    x2 = x+room['width']
+    y = room['y_loc']
+    y2 = y+room['height']
+    print('Passed room vars (x, x2, y, y2): ', x, x2, y, y2)
+    # 2 is wall surrounding a floor
+    mapArr[x-1:x2+1, y-1:y2+1] = 2
+    # 0 is floor
+    mapArr[x:x2, y:y2] = 0
+
+# pick start and end points
+char_x, char_y, start_room = start_end.gen_start(rooms)
+end_x, end_y = start_end.gen_end(rooms, start_room)
+
+# char position relative to screen
+char_x_rel = window_width_units//2
+char_y_rel = window_height_units//2
+
+# adjust screen to focus on character
+# ensure screen isnt pushed out of area
+if(char_x < char_x_rel):
+    char_x_rel = char_x
+    window_x_units = 0
+elif(char_x+char_x_rel>= mapWidth):
+    char_x_rel = char_x-mapWidth+window_width_units
+    window_x_units = mapWidth-window_width_units
+else:
+    window_x_units = char_x - char_x_rel
+
+if(char_y < char_y_rel):
+    char_y_rel = char_y
+    window_y_units = 0
+elif(char_y+char_y_rel>= mapHeight):
+    char_y_rel = char_y-mapHeight+window_height_units
+    window_y_units = mapHeight-window_height_units
+else:
+    window_y_units = char_y - char_y_rel
+
+# add paths
+print('______________________________________________')
+print('Generating paths')
+paths = path_gen2.path(rooms)
+print('Loading paths onto map')
+for path in paths:
+    x = path['x_loc']
+    y = path['y_loc']
+    mapArr[x, y] = 0
+
+
+# add walls for paths
+for x in range(1, mapWidth-2):
+    for y in range(1, mapHeight-2):
+        if(mapArr[x, y] == 0):
+            if(mapArr[x, y+1] == 1):
+                mapArr[x, y+1] = 2
+            if(mapArr[x+1, y] == 1):
+                mapArr[x+1, y] = 2
+            if(mapArr[x, y-1] == 1):
+                mapArr[x, y-1] = 2
+            if(mapArr[x-1, y] == 1):
+                mapArr[x-1, y] = 2
+
+# LOAD ENEMIES
+enemyArr = []
+enemyArr.extend(enemy_gen.loadEnemies(rooms, max_rooms, 'Starboi', hero_stats, enemyArr))
+enemyArr.extend(enemy_gen.loadEnemies(rooms, round(max_rooms * 1.5), 'Demondog', hero_stats, enemyArr))
+enemyArr.extend(enemy_gen.loadEnemies(rooms, 3, 'Hells Janitor', hero_stats, enemyArr))
+for enemy in enemyArr:
+    # enemy_arr.append({'x_loc' : x_pos, 'y_loc' : y_pos, 'hp' : stat_hp, 'att' : stat_att, 'elem' : stat_elem, 'crit_dmg' : crit_dmg, 'crit_chc' : crit_chc, 'mutations' : stat_mut, 'size' : default_size})
+    enemy_gen.updateMut(enemy)
+    round(enemy['hp'], 2)
+    round(enemy['att'], 2)
+    round(enemy['def'], 2)
+    print('MONSTER:', enemy['name'], '| HP:', enemy['hp'],'| ATT:', enemy['att'], '| DEF:', enemy['def'], '| Element', enemy['elem'], '| CDMG:', str(enemy['crit_dmg']) + 'X', '| CHC:', str(enemy['crit_chc']) + '%', '| MUTATIONS:', enemy['mutations'], '| XP:', str(enemy['xp']) + ' pts')
+
+# hero stats
+print('HERO BASE STATS ', '     HP:', hero_stats['hp'],'| ATT:', hero_stats['att'], '| DEF:', hero_stats['def'], '| Element:', hero_stats['elem'], '| CDMG:', str(hero_stats['crit_dmg']) + 'X', '| CHC:', str(hero_stats['crit_chc']) + '%', '| MUTATIONS: ', hero_stats['mutations'], 'XP:', hero_stats['xp'])
+
+
+# Create graphical window
+screen = pygame.display.set_mode(size)
+screen.fill(white)
+
+wall = pygame.image.load("assets/wall/default-wall-64.bmp")
+floor = pygame.image.load("assets/floor/default-floor-64.bmp")
+char = pygame.image.load("assets/character/knight-64.png")
+goal = pygame.image.load("assets/floor/goal-64.png")
+fog = pygame.image.load("assets/misc/fog-64.png")
+antifog = pygame.image.load("assets/misc/antifog-64.png")
+starfish = pygame.image.load("assets/enemy/starfish-64.png")
+dog = pygame.image.load("assets/enemy/demondog-64.png")
+ogre = pygame.image.load("assets/enemy/hellsjanitor.png")
+att_icon = pygame.image.load("assets/misc/icons/sword-32.png")
+def_icon = pygame.image.load("assets/misc/icons/shield-32.png")
+
+def checkForEnemy(x, y):
+    # return false if enemy occupying space
+    # return true if u can move there
     for enemy in enemyArr:
         # enemy_arr.append({'x_loc' : x_pos, 'y_loc' : y_pos, 'hp' : stat_hp, 'att' : stat_att, 'elem' : stat_elem, 'crit_dmg' : crit_dmg, 'crit_chc' : crit_chc, 'mutations' : stat_mut, 'size' : default_size})
         enemy_gen.updateMut(enemy)
@@ -263,108 +366,113 @@ while 1:
             return False
         
 
-    def renderMap():
-        global enemyArr
-        for enemies in enemyArr:
-            if enemies['hp'] <= 0:
-                enemyArr.remove(enemies)
-            float("{0:.2f}".format(enemies['hp']))
-            float("{0:.2f}".format(enemies['att']))
-            float("{0:.2f}".format(enemies['def']))
-        #Clear screen
-        screen.fill(black) 
-        # if called either init / player made a move
-        tempArr = enemy_turn.enemy_move(char_x_rel, char_y_rel, fog_size, window_x_units, window_y_units, enemyArr, mapArr)
-        enemyArr = tempArr
-        # enemies attack
-        for enemy in enemyArr:
-            if enemy['willAtk'] == True:
-                damage_calc.attack(enemy, hero_stats, console_log)
+def renderMap():
+    global enemyArr
+    for enemies in enemyArr:
+        if enemies['hp'] <= 0:
+            enemyArr.remove(enemies)
+        float("{0:.2f}".format(enemies['hp']))
+        float("{0:.2f}".format(enemies['att']))
+        float("{0:.2f}".format(enemies['def']))
+    #Clear screen
+    screen.fill(black) 
+    # if called either init / player made a move
+    tempArr = enemy_turn.enemy_move(char_x_rel, char_y_rel, fog_size, window_x_units, window_y_units, enemyArr, mapArr)
+    enemyArr = tempArr
+    # enemies attack
+    for enemy in enemyArr:
+        if enemy['willAtk'] == True:
+            damage_calc.attack(enemy, hero_stats, console_log)
 
-        # create rectangles
-        for x in range(window_x_units, window_width_units+window_x_units):
-            for y in range(window_y_units, window_height_units+window_y_units):
-                # shift graphics depending on window location
-                new_x = x-window_x_units
-                new_y = y-window_y_units
-                if(mapArr[x, y] == 2):
-                    #print('Drawing wall')
-                    screen.blit(wall, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
-                elif(mapArr[x, y] == 0):
-                    #print('Drawing floor')
-                    screen.blit(floor, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))               
+    # create rectangles
+    for x in range(window_x_units, window_width_units+window_x_units):
+        for y in range(window_y_units, window_height_units+window_y_units):
+            # shift graphics depending on window location
+            new_x = x-window_x_units
+            new_y = y-window_y_units
+            if(mapArr[x, y] == 2):
+                #print('Drawing wall')
+                screen.blit(wall, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+            elif(mapArr[x, y] == 0):
+                #print('Drawing floor')
+                screen.blit(floor, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))               
 
-        #load fog data
-        fog_x = char_x_rel-fog_size
-        fog_x2 = char_x_rel+fog_size
-        fog_y = char_y_rel-fog_size
-        fog_y2 = char_y_rel+fog_size
-        for x in range(0, window_width_units):
-            for y in range(0, window_height_units):
-                # draw antifog of war
-                if not ((x >= fog_x and x <= fog_x2) and (y >= fog_y and y <= fog_y2)):
-                    screen.blit(fog, (x*unit_size, y*unit_size, unit_size, unit_size))
+    #load fog data
+    fog_x = char_x_rel-fog_size
+    fog_x2 = char_x_rel+fog_size
+    fog_y = char_y_rel-fog_size
+    fog_y2 = char_y_rel+fog_size
+    for x in range(0, window_width_units):
+        for y in range(0, window_height_units):
+            # draw antifog of war
+            if not ((x >= fog_x and x <= fog_x2) and (y >= fog_y and y <= fog_y2)):
+                screen.blit(fog, (x*unit_size, y*unit_size, unit_size, unit_size))
 
-        # draw goal point
-        new_x = end_x-window_x_units
-        new_y = end_y-window_y_units
-        # if not in the fog display
-        if((new_x >= fog_x and new_x <= fog_x2)and (new_y >= fog_y and new_y <= fog_y2)):
-            screen.blit(goal, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+    # draw goal point
+    new_x = end_x-window_x_units
+    new_y = end_y-window_y_units
+    # if not in the fog display
+    if((new_x >= fog_x and new_x <= fog_x2)and (new_y >= fog_y and new_y <= fog_y2)):
+        screen.blit(goal, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
 
-        # draw hero
-        hero_stats['x_loc'] = char_x_rel + window_x_units
-        hero_stats['y_loc'] = char_y_rel + window_y_units
-        screen.blit(char, (char_x_rel*unit_size, char_y_rel*unit_size, unit_size, unit_size))
+    # draw hero
+    hero_stats['x_loc'] = char_x_rel + window_x_units
+    hero_stats['y_loc'] = char_y_rel + window_y_units
+    screen.blit(char, (char_x_rel*unit_size, char_y_rel*unit_size, unit_size, unit_size))
 
 
-        # console log
-        # id 0 = passive, 1 = combat, 2 = xp
-        count = 0
-        for log in reversed(console_log):
-            consoleX = hero_stats['x_loc'] - 5
-            consoleY = hero_stats['y_loc'] + 500
-            if log['id'] == 0:
-                color = (255, 255, 0)
-            elif log['id'] == 1:
-                color = (255, 0, 0)
-            elif log['id'] == 2:
-                color = (0, 191, 255)
-            elif log['id'] == 3:
-                color = (255, 69, 0)
-            elif log['id'] == 4:
-                color = (0, 255, 0)
+    # console log
+    # id 0 = passive, 1 = combat, 2 = xp
+    count = 0
+    for log in reversed(console_log):
+        consoleX = 5
+        consoleY = window_height - 40
+        if log['id'] == 0:
+            color = (255, 255, 0)
+        elif log['id'] == 1:
+            color = (255, 0, 0)
+        elif log['id'] == 2:
+            color = (0, 191, 255)
+        elif log['id'] == 3:
+            color = (255, 69, 0)
+        elif log['id'] == 4:
+            color = (0, 255, 0)
 
-            console_text = consolefont.render(log['log'], 1, color)
-            screen.blit(console_text, (consoleX, consoleY - (count * 20)))
-            count = count + 1
-        
-        # HUD
-        # HEALTH
-        for i in range(int(hero_stats['hp'])):
-            hud_hp = hudfont.render('I', 1, (0, 255, 0))
-            screen.blit(hud_hp, (hero_stats['x_loc'] + 1200 - (i * 10), hero_stats['y_loc'] - 5))
-        # ATT
-        hud_att = hudfont.render(str(hero_stats['att']), 1, (255, 0, 0))
-        screen.blit(hud_att, (hero_stats['x_loc'] + 1180, (hero_stats['y_loc'] + 30)))
-        # DEF
-        hud_def = hudfont.render(str(hero_stats['def']), 1, (128, 128, 128))
-        screen.blit(hud_def, (hero_stats['x_loc'] + 1180, (hero_stats['y_loc'] + 60)))
-        # XP
-        hud_xp = hudfont.render('XP: ' + str(hero_stats['xp']), 1, (0, 191, 255))
-        screen.blit(hud_xp, (hero_stats['x_loc'] + 1130, (hero_stats['y_loc'] + 90)))
-        # Current weapon
-        hud_wep = hudfont.render('Equipped: ' + str(hero_stats['weapon']), 1, (100, 100, 100))
-        screen.blit(hud_wep, (hero_stats['x_loc'] + 1048, (hero_stats['y_loc'] + 120)))    
+        console_text = consolefont.render(log['log'], 1, color)
+        screen.blit(console_text, (consoleX, consoleY - (count * 20)))
+        count = count + 1
+    
+    # 
+    hudX = window_width - 30
+    hudY = 10
+    # HEALTH
+    for i in range(int(hero_stats['hp'])):
+        hud_hp = hudfont.render('I', 1, (0, 255, 0))
+        screen.blit(hud_hp, (hudX - (i * 10), hudY))
 
-        # draw enemies
-        ct = 0
-        for enemy in enemyArr:
-            showStats_HP = myfont.render('HP: '+str(enemy['hp']), 1, (255, 0, 0))
-            new_x = enemy['x_loc']-window_x_units
-            new_y = enemy['y_loc']-window_y_units
-            print(ct, enemy['x_loc'], enemy['y_loc'])
-            ct+=1
+    # ATTHUD
+    hud_att = hudfont.render(str(hero_stats['att']), 1, (255, 0, 0))
+    screen.blit(hud_att, (hudX - 20, hudY + 40))
+    screen.blit(att_icon, (hudX - 50, hudY + 40))
+    # DEF
+    hud_def = hudfont.render(str(hero_stats['def']), 1, (128, 128, 128))
+    screen.blit(hud_def, (hudX - 20, hudY + 70))
+    screen.blit(def_icon, (hudX - 50, hudY + 70))
+    # XP
+    hud_xp = hudfont.render('XP: ' + str(hero_stats['xp']), 1, (0, 191, 255))
+    screen.blit(hud_xp, (hudX - 62, hudY + 100))
+    # Current weapon
+    hud_wep = hudfont.render('Equipped: ' + str(hero_stats['weapon']), 1, (100, 100, 100))
+    screen.blit(hud_wep, (hudX - 150,  hudY + 130))    
+
+    # draw enemies
+    ct = 0
+    for enemy in enemyArr:
+        showStats_HP = myfont.render('HP: '+str(enemy['hp']), 1, (255, 0, 0))
+        new_x = enemy['x_loc']-window_x_units
+        new_y = enemy['y_loc']-window_y_units
+        print(ct, enemy['x_loc'], enemy['y_loc'])
+        ct+=1
     
             
 
