@@ -1,7 +1,7 @@
 import random
 import numpy as np
 
-def loadEnemies(room_arr, num_enemies, enemy_type):
+def loadEnemies(room_arr, num_enemies, enemy_type, player, enemy_arr):
 
     enemy_arr = []
 
@@ -29,6 +29,15 @@ def loadEnemies(room_arr, num_enemies, enemy_type):
             start_counter = start_counter + 1
             x_pos = random.randint(random_room['x_loc'], random_room['x_loc'] + random_room['width'] -1)
             y_pos = random.randint(random_room['y_loc'], random_room['y_loc'] + random_room['height'] -1)
+            # dont choose character location
+            if (x_pos == player['x_loc'] and y_pos == player['y_loc']):
+                x_pos = random.randint(random_room['x_loc'], random_room['x_loc'] + random_room['width'] -1)
+                y_pos = random.randint(random_room['y_loc'], random_room['y_loc'] + random_room['height'] -1)
+            for monster in enemy_arr:
+                if x_pos == monster['x_loc'] and y_pos == monster['y_loc']:
+                    x_pos = random.randint(random_room['x_loc'], random_room['x_loc'] + random_room['width'] -1)
+                    y_pos = random.randint(random_room['y_loc'], random_room['y_loc'] + random_room['height'] -1)
+
             
             # monster stats
             stat_hp = float("{0:.2f}".format(createStats(base_hp, 2)))

@@ -143,9 +143,9 @@ for x in range(1, mapWidth-2):
 
 # LOAD ENEMIES
 enemyArr = []
-enemyArr.extend(enemy_gen.loadEnemies(rooms, max_rooms, 'Starboi'))
-enemyArr.extend(enemy_gen.loadEnemies(rooms, round(max_rooms * 1.5), 'Demondog'))
-enemyArr.extend(enemy_gen.loadEnemies(rooms, 3, 'Hells Janitor'))
+enemyArr.extend(enemy_gen.loadEnemies(rooms, max_rooms, 'Starboi', hero_stats, enemyArr))
+enemyArr.extend(enemy_gen.loadEnemies(rooms, round(max_rooms * 1.5), 'Demondog', hero_stats, enemyArr))
+enemyArr.extend(enemy_gen.loadEnemies(rooms, 3, 'Hells Janitor', hero_stats, enemyArr))
 for enemy in enemyArr:
     # enemy_arr.append({'x_loc' : x_pos, 'y_loc' : y_pos, 'hp' : stat_hp, 'att' : stat_att, 'elem' : stat_elem, 'crit_dmg' : crit_dmg, 'crit_chc' : crit_chc, 'mutations' : stat_mut, 'size' : default_size})
     enemy_gen.updateMut(enemy)
