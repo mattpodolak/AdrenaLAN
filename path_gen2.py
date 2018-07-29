@@ -33,12 +33,18 @@ def path(rooms):
                     if delt_x > 0:
                         # land on left of block 2
                         end_pt_x = x2
-                        end_pt_y = random.randint(y2+1, y2+height2-1)
+                        try:
+                            end_pt_y = random.randint(y2+1, y2+height2-1)
+                        except:
+                            end_pt_y = y2+1
                         pathArr = createPath(pathArr, 'bottom', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
                     else:
                         # land on right
                         end_pt_x = x2+width2-1
-                        end_pt_y = random.randint(y2+1, y2+height2-1)
+                        try:
+                            end_pt_y = random.randint(y2+1, y2+height2-1)
+                        except:
+                            end_pt_y = y2+1
                         pathArr = createPath(pathArr, 'bottom', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
                 else:
                     # start on top, pick pixel to start at
@@ -47,12 +53,18 @@ def path(rooms):
                     if delt_x > 0:
                         # land on left of block 2
                         end_pt_x = x2
-                        end_pt_y = random.randint(y2+1, y2+height2-1)
+                        try:
+                            end_pt_y = random.randint(y2+1, y2+height2-1)
+                        except:
+                            end_pt_y = y2+1
                         pathArr = createPath(pathArr, 'top', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
                     else:
                         # land on right
                         end_pt_x = x2+width2-1
-                        end_pt_y = random.randint(y2+1, y2+height2-1)
+                        try:
+                            end_pt_y = random.randint(y2+1, y2+height2-1)
+                        except:
+                            end_pt_y = y2+1
                         pathArr = createPath(pathArr, 'top', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
             else:
                 if(delt_x > 0):
@@ -62,11 +74,17 @@ def path(rooms):
                     if delt_y > 0:
                         # land on top of block 2
                         end_pt_y = y2
-                        end_pt_x = random.randint(x2+1, x2+width2-1)
+                        try:
+                            end_pt_x = random.randint(x2+1, x2+width2-1)
+                        except:
+                            end_pt_x = x2+1
                     else:
                         # land on bottom
                         end_pt_y = y2+height2-1
-                        end_pt_x = random.randint(x2+1, x2+width2-1)
+                        try:
+                            end_pt_x = random.randint(x2+1, x2+width2-1)
+                        except:
+                            end_pt_x = x2+1
                     pathArr = createPath(pathArr, 'right', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
                 else:
                     # start on left, pick pixel to start at
@@ -75,11 +93,17 @@ def path(rooms):
                     if delt_y > 0:
                         # land on top of block 2
                         end_pt_y = y2
-                        end_pt_x = random.randint(x2+1, x2+width2-1)
+                        try:
+                            end_pt_x = random.randint(x2+1, x2+width2-1)
+                        except:
+                            end_pt_x = x2+1
                     else:
                         # land on bottom
                         end_pt_y = y2-1+height2
-                        end_pt_x = random.randint(x2+1, x2+width2-1)
+                        try:
+                            end_pt_x = random.randint(x2+1, x2+width2-1)
+                        except:
+                            end_pt_x = x2+1
                     pathArr = createPath(pathArr, 'left', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
             
             if num_paths == 1:

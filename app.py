@@ -93,7 +93,7 @@ while 1:
     console_log = []
     console_log.append({'log' : 'Floor: '+ str(floor_number) + ' ' + random.choice(dungeon_name), 'id' : 5})
     if(first_start == True):
-        console_log.append({'log' : 'Welcome to the game! Press p to attack, wasd to move', 'id' : 5})
+        console_log.append({'log' : 'G00d luck! Press p to attack, wasd to move, r to restart', 'id' : 5})
         first_start = False
     elif(restart == True):
         # reset hero stats
@@ -431,7 +431,8 @@ while 1:
                 if(new_y == char_y_rel or new_y == char_y_rel + 1 or new_y == char_y_rel-1):
                     # move to next floor
                     rend = False
-                    global floor_number+=1
+                    global floor_number
+                    floor_number+=1
 
 
     # runs the game
