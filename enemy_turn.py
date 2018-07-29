@@ -1,3 +1,6 @@
+import math
+import numpy as np
+
 def enemy_move(char_x_rel, char_y_rel, fog_size, window_x_units, window_y_units, enemyArr, mapArr):
     # only make a move if in fog
     fog_x = char_x_rel-fog_size
@@ -28,16 +31,41 @@ def enemy_move(char_x_rel, char_y_rel, fog_size, window_x_units, window_y_units,
             
             else:
                 #check for move
-                new_x, new_y = validMoves(x, y, enemyArr, mapArr)
+                new_x, new_y = validMoves(x_rel, y_rel, enemyArr, mapArr, char_x_rel, char_y_rel)
         
             ct+=1
             
-            
+# calculates distance between 2 points
+def dist(x1, x2, y1, y2):
+    distX = math.pow(x1 - x2, 2)
+    distY = math.pow(y1 - y2, 2)
+    
+    return math.sqrt(distX + distY)            
 
 
 
-def validMoves(x, y, enemyArr, mapArr):
-    if(mapArr[x, y+1] == 0)
+def validMoves(x, y, enemyArr, mapArr, char_x_rel, char_y_rel):
+    check = []
+    if(mapArr[x, y+1] == 0):
+        check.append({'x':x, 'y':y+1})
+    if(mapArr[x, y-1] == 0):
+        check.append({'x':x, 'y':y-1})
+    if(mapArr[x+1, y] == 0):
+        check.append({'x':x+1, 'y':y})
+    if(mapArr[x-1, y] == 0):
+        check.append({'x':x-1, 'y':y})
+    
+    minDist = 1000
+    minpair = {'x':x, 'y':y}
+    for pair in check:
+        distance = dist(pair['x'], char_x_rel, pair['y'], char_y_rel)
+
+        if distance < minDist:
+            minpair = pair
+            minDist = distance
+    
+    return minpair['x'], minpair['y']
+
 
 
 def checkForEnemy(x, y):
