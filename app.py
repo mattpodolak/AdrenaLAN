@@ -29,7 +29,7 @@ DISPLAY VARIABLES
 
 '''
 # pixels in a unit
-unit_size = 32
+unit_size = 64
 
 white = 1, 1, 1
 black = 0, 0, 0
@@ -39,13 +39,14 @@ window_x_units = 0
 window_y_units = 0
 
 # window size with pixels and units
-window_width_units = 40
-window_height_units = 20
+window_width_units = 20
+window_height_units = 10
 window_width = window_width_units * unit_size
 window_height = window_height_units * unit_size
 
 # window size
 size = window_width, window_height
+fog_size = 3
 
 mapArr = map_gen.generateMap(map_min_width, map_max_width, map_min_height, map_max_height)
 mapWidth, mapHeight = mapArr.shape
@@ -118,6 +119,19 @@ for path in paths:
     y = path['y_loc']
     mapArr[x, y] = 0
 
+# add walls for paths
+for x in range(1, mapWidth-2):
+    for y in range(1, mapHeight-2):
+        if(mapArr[x, y] == 0):
+            if(mapArr[x, y+1] == 1):
+                mapArr[x, y+1] = 2
+            if(mapArr[x+1, y] == 1):
+                mapArr[x+1, y] = 2
+            if(mapArr[x, y-1] == 1):
+                mapArr[x, y-1] = 2
+            if(mapArr[x-1, y] == 1):
+                mapArr[x-1, y] = 2
+
 # LOAD ENEMIES
 enemyArr = enemy_gen.loadEnemies(rooms, max_rooms * 2)
 for enemy in enemyArr:
@@ -136,15 +150,63 @@ print('HERO BASE STATS ', '     HP:', hero_stats['hp'],'| ATT:', hero_stats['att
 screen = pygame.display.set_mode(size)
 screen.fill(white)
 
-wall = pygame.image.load("assets/wall/default-wall.bmp")
-floor = pygame.image.load("assets/floor/default-floor.bmp")
-char = pygame.image.load("assets/character/knight.png")
-goal = pygame.image.load("assets/floor/goal.png")
-starfish = pygame.image.load("assets/enemy/starfish.png")
+wall = pygame.image.load("assets/wall/default-wall-64.bmp")
+floor = pygame.image.load("assets/floor/default-floor-64.bmp")
+char = pygame.image.load("assets/character/knight-64.png")
+goal = pygame.image.load("assets/floor/goal-64.png")
+starfish = pygame.image.load("assets/enemy/starfish-64.png")
+fog = pygame.image.load("assets/misc/fog-64.png")
+antifog = pygame.image.load("assets/misc/antifog-64.png")
+
+def checkForEnemy(x, y):
+    # return false if enemy occupying space
+    # return true if u can move there
+    for enemy in enemyArr:
+        en_x = enemy['x_loc']
+        en_y = enemy['y_loc']
+        if(en_x == x and en_y == y):
+            print('Enemy in the way')
+            return False
+    
+    return True
+    
+def validMove(move):
+    arrayLoc_x = window_x_units + char_x_rel
+    arrayLoc_y = window_y_units + char_y_rel
+
+    if(move == 'w' and arrayLoc_y != 0):
+        print('next move ', mapArr[arrayLoc_x, arrayLoc_y-1])
+        if(mapArr[arrayLoc_x, arrayLoc_y-1] == 0):
+            return checkForEnemy(arrayLoc_x, arrayLoc_y-1)
+        else:
+            return False
+    elif(move == 's' and arrayLoc_y != mapHeight):
+        print('next move ', mapArr[arrayLoc_x, arrayLoc_y+1])
+        if(mapArr[arrayLoc_x, arrayLoc_y+1] == 0):
+            return checkForEnemy(arrayLoc_x, arrayLoc_y+1)
+        else:
+            return False
+    elif(move == 'a' and arrayLoc_x != 0):
+        print('next move ', mapArr[arrayLoc_x-1, arrayLoc_y])
+        if(mapArr[arrayLoc_x-1, arrayLoc_y] == 0):
+            return checkForEnemy(arrayLoc_x-1, arrayLoc_y)
+        else:
+            return False
+    elif(move == 'd' and arrayLoc_x != mapWidth):
+        print('next move ', mapArr[arrayLoc_x+1, arrayLoc_y])
+        if(mapArr[arrayLoc_x+1, arrayLoc_y] == 0):
+            return checkForEnemy(arrayLoc_x+1, arrayLoc_y)
+        else:
+            return False
+    else:
+        return False
+        
 
 def renderMap():
     #Clear screen
-    screen.fill(black)
+    screen.fill(black) 
+    # if called either init / player made a move
+    # enemy_turn
     # create rectangles
     for x in range(window_x_units, window_width_units+window_x_units):
         for y in range(window_y_units, window_height_units+window_y_units):
@@ -157,11 +219,29 @@ def renderMap():
             elif(mapArr[x, y] == 0):
                 #print('Drawing floor')
                 screen.blit(floor, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+                
+
     # draw goal point
-    # new_x = (add)-window_x_units
     new_x = end_x-window_x_units
     new_y = end_y-window_y_units
-    screen.blit(goal, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+
+    #load fog data
+    fog_x = char_x_rel-fog_size
+    fog_x2 = char_x_rel+fog_size
+    fog_y = char_y_rel-fog_size
+    fog_y2 = char_y_rel+fog_size
+    print('fx ', fog_x, ' fx2 ', fog_x2, ' fy ', fog_y, ' fy2 ', fog_y2, ' cx ', char_x_rel, ' cy ', char_y_rel)
+    for x in range(0, window_width_units):
+        for y in range(0, window_height_units):
+            # draw antifog of war
+            if((x >= fog_x and x <= fog_x2) and (y >= fog_y and y <= fog_y2)):
+                print('')
+            else:
+                screen.blit(fog, (x*unit_size, y*unit_size, unit_size, unit_size))
+
+    # if not in the fog display
+    if((new_x >= fog_x and new_x <= fog_x2)and (new_y >= fog_y and new_y <= fog_y2)):
+        screen.blit(goal, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
 
     # draw character
     screen.blit(char, (char_x_rel*unit_size, char_y_rel*unit_size, unit_size, unit_size))
@@ -171,44 +251,64 @@ def renderMap():
         showStats_HP = myfont.render('HP: '+str(enemy['hp']), 1, (255, 0, 0))
         new_x = enemy['x_loc']-window_x_units
         new_y = enemy['y_loc']-window_y_units
-        screen.blit(starfish, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
-        screen.blit(showStats_HP, (new_x*unit_size - (0.3*unit_size), new_y*unit_size - (0.8*unit_size)))
     
+        # if not in the fog display
+        if((new_x >= fog_x and new_x <= fog_x2)and (new_y >= fog_y and new_y <= fog_y2)):
+            screen.blit(starfish, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+            screen.blit(showStats_HP, (new_x*unit_size - (0.3*unit_size), new_y*unit_size - (0.8*unit_size)))
 
 renderMap()
 
 def moveScreen(keyWASD):
     global window_x_units
     global window_y_units
+    global char_x_rel
+    global char_y_rel
 
     if(keyWASD == 'w'):
         # check if move is possible
-        if(window_y_units > 0):
-            window_y_units-=1
+        if(window_y_units > 0 and char_y_rel == window_height_units//2):
+            if(True == validMove('w')):
+                window_y_units-=1
+                renderMap()
+        elif(True == validMove('w')):
+            char_y_rel-=1
             renderMap()
         else:
             print('Cant move that direction')
 
     elif(keyWASD == 'a'):
         # check if move is possible
-        if(window_x_units > 0):
-            window_x_units-=1
+        if(window_x_units > 0 and char_x_rel == window_width_units//2):
+            if(True == validMove('a')):
+                window_x_units-=1
+                renderMap()
+        elif(True == validMove('a')):
+            char_x_rel-=1
             renderMap()
         else:
             print('Cant move that direction')
 
     elif(keyWASD == 's'):
         # check if move is possible
-        if(window_y_units + window_height_units < mapHeight):
-            window_y_units+=1
+        if(window_y_units + window_height_units < mapHeight and char_y_rel == window_height_units//2):
+            if(True == validMove('s')):
+                window_y_units+=1
+                renderMap()
+        elif(True == validMove('s')):
+            char_y_rel+=1
             renderMap()
         else:
             print('Cant move that direction')
 
     elif(keyWASD == 'd'):
         # check if move is possible
-        if(window_x_units + window_width_units < mapWidth):
-            window_x_units+=1
+        if(window_x_units + window_width_units < mapWidth and char_x_rel == window_width_units//2):
+            if(True == validMove('d')):
+                window_x_units+=1
+                renderMap()
+        elif(True == validMove('d')):
+            char_x_rel+=1
             renderMap()
         else:
             print('Cant move that direction')
