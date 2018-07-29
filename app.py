@@ -6,6 +6,7 @@ import random
 
 #pylint shows as an errror
 pygame.init()
+pygame.display.set_caption('Dungeons And Stuff')
 pygame.font.init()
 myfont = pygame.font.SysFont('Comic Sans MS', 12)
 consolefont = pygame.font.SysFont('Comic Sans MS', 16)
@@ -170,6 +171,8 @@ antifog = pygame.image.load("assets/misc/antifog-64.png")
 starfish = pygame.image.load("assets/enemy/starfish-64.png")
 dog = pygame.image.load("assets/enemy/demondog-64.png")
 ogre = pygame.image.load("assets/enemy/hellsjanitor.png")
+att_icon = pygame.image.load("assets/misc/icons/sword-32.png")
+def_icon = pygame.image.load("assets/misc/icons/shield-32.png")
 
 def checkForEnemy(x, y):
     # return false if enemy occupying space
@@ -292,17 +295,19 @@ def renderMap():
         screen.blit(console_text, (consoleX, consoleY - (count * 20)))
         count = count + 1
     
-    # HUD
+    # 
     # HEALTH
     for i in range(int(hero_stats['hp'])):
         hud_hp = hudfont.render('I', 1, (0, 255, 0))
         screen.blit(hud_hp, (hero_stats['x_loc'] + 1200 - (i * 10), hero_stats['y_loc'] - 5))
-    # ATT
+    # ATTHUD
     hud_att = hudfont.render(str(hero_stats['att']), 1, (255, 0, 0))
     screen.blit(hud_att, (hero_stats['x_loc'] + 1180, (hero_stats['y_loc'] + 30)))
+    screen.blit(att_icon, (hero_stats['x_loc'] + 1150, (hero_stats['y_loc'] + 30)))
     # DEF
     hud_def = hudfont.render(str(hero_stats['def']), 1, (128, 128, 128))
     screen.blit(hud_def, (hero_stats['x_loc'] + 1180, (hero_stats['y_loc'] + 60)))
+    screen.blit(def_icon, (hero_stats['x_loc'] + 1150, (hero_stats['y_loc'] + 60)))
     # XP
     hud_xp = hudfont.render('XP: ' + str(hero_stats['xp']), 1, (0, 191, 255))
     screen.blit(hud_xp, (hero_stats['x_loc'] + 1130, (hero_stats['y_loc'] + 90)))
