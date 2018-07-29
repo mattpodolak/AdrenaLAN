@@ -1,4 +1,4 @@
-import sys, pygame, map_gen, path_gen2, start_end, enemy_gen
+import sys, pygame, map_gen, path_gen2, start_end, enemy_gen, enemy_turn
 import numpy as np
 import pygame.surfarray as surfarray
 import pygame
@@ -203,10 +203,12 @@ def validMove(move):
         
 
 def renderMap():
+    global enemyArr
     #Clear screen
     screen.fill(black) 
     # if called either init / player made a move
-    # enemy_turn
+    tempArr = enemy_turn.enemy_move(char_x_rel, char_y_rel, fog_size, window_x_units, window_y_units, enemyArr, mapArr)
+    enemyArr = tempArr
     # create rectangles
     for x in range(window_x_units, window_width_units+window_x_units):
         for y in range(window_y_units, window_height_units+window_y_units):
@@ -218,27 +220,22 @@ def renderMap():
                 screen.blit(wall, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
             elif(mapArr[x, y] == 0):
                 #print('Drawing floor')
-                screen.blit(floor, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
-                
-
-    # draw goal point
-    new_x = end_x-window_x_units
-    new_y = end_y-window_y_units
+                screen.blit(floor, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))               
 
     #load fog data
     fog_x = char_x_rel-fog_size
     fog_x2 = char_x_rel+fog_size
     fog_y = char_y_rel-fog_size
     fog_y2 = char_y_rel+fog_size
-    print('fx ', fog_x, ' fx2 ', fog_x2, ' fy ', fog_y, ' fy2 ', fog_y2, ' cx ', char_x_rel, ' cy ', char_y_rel)
     for x in range(0, window_width_units):
         for y in range(0, window_height_units):
             # draw antifog of war
-            if((x >= fog_x and x <= fog_x2) and (y >= fog_y and y <= fog_y2)):
-                print('')
-            else:
+            if not ((x >= fog_x and x <= fog_x2) and (y >= fog_y and y <= fog_y2)):
                 screen.blit(fog, (x*unit_size, y*unit_size, unit_size, unit_size))
 
+    # draw goal point
+    new_x = end_x-window_x_units
+    new_y = end_y-window_y_units
     # if not in the fog display
     if((new_x >= fog_x and new_x <= fog_x2)and (new_y >= fog_y and new_y <= fog_y2)):
         screen.blit(goal, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
