@@ -56,8 +56,8 @@ rooms = map_gen.generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist
 
 # main hero
 hero_stats = {
-    'hp' : 20,
-    'att' : 8,
+    'hp' : 30,
+    'att' : 10,
     'def' : 8,
     'crit_dmg' : 1.5,
     'crit_chc' : 30,
@@ -123,7 +123,13 @@ enemyArr = enemy_gen.loadEnemies(rooms, max_rooms * 2)
 for enemy in enemyArr:
     # enemy_arr.append({'x_loc' : x_pos, 'y_loc' : y_pos, 'hp' : stat_hp, 'att' : stat_att, 'elem' : stat_elem, 'crit_dmg' : crit_dmg, 'crit_chc' : crit_chc, 'mutations' : stat_mut, 'size' : default_size})
     enemy_gen.updateMut(enemy)
-    print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'], '     HP:', enemy['hp'],'| ATT:', enemy['att'], '| DEF:', enemy['def'], '| Element', enemy['elem'], '| CDMG:', str(enemy['crit_dmg']) + 'X', '| CHC:', str(enemy['crit_chc']) + '%', '| MUTATIONS: ', enemy['mutations'])
+    round(enemy['hp'], 2)
+    round(enemy['att'], 2)
+    round(enemy['def'], 2)
+    print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'], '     HP:', enemy['hp'],'| ATT:', enemy['att'], '| DEF:', enemy['def'], '| Element', enemy['elem'], '| CDMG:', str(enemy['crit_dmg']) + 'X', '| CHC:', str(enemy['crit_chc']) + '%', '| MUTATIONS:', enemy['mutations'], '| XP:', str(enemy['xp']) + ' pts')
+
+# hero stats
+print('HERO BASE STATS ', '     HP:', hero_stats['hp'],'| ATT:', hero_stats['att'], '| DEF:', hero_stats['def'], '| Element:', hero_stats['elem'], '| CDMG:', str(hero_stats['crit_dmg']) + 'X', '| CHC:', str(hero_stats['crit_chc']) + '%', '| MUTATIONS: ', hero_stats['mutations'], 'XP:', hero_stats['xp'])
 
 
 # Create graphical window
@@ -162,16 +168,12 @@ def renderMap():
 
     # draw enemies
     for enemy in enemyArr:
-        showStats_HP = myfont.render('HP: '+str(enemy['hp']), 1, (0, 255, 0))
-        showStats_ATT = myfont.render('ATT: '+str(enemy['att']), 1, (255, 0, 0))
+        showStats_HP = myfont.render('HP: '+str(enemy['hp']), 1, (255, 0, 0))
         new_x = enemy['x_loc']-window_x_units
         new_y = enemy['y_loc']-window_y_units
         screen.blit(starfish, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
-        screen.blit(showStats_HP, (new_x*unit_size - (1.2*unit_size), new_y*unit_size - (0.8*unit_size)))
-        screen.blit(showStats_ATT, (new_x*unit_size + (0.6*unit_size), new_y*unit_size - (0.8*unit_size)))
+        screen.blit(showStats_HP, (new_x*unit_size - (0.3*unit_size), new_y*unit_size - (0.8*unit_size)))
     
-    print('HERO BASE STATS ', '     HP:', hero_stats['hp'],'| ATT:', hero_stats['att'], '| DEF:', hero_stats['def'], '| Element:', hero_stats['elem'], '| CDMG:', str(hero_stats['crit_dmg']) + 'X', '| CHC:', str(hero_stats['crit_chc']) + '%', '| MUTATIONS: ', hero_stats['mutations'], 'XP:', hero_stats['xp'])
-
 
 renderMap()
 
@@ -225,16 +227,16 @@ while 1:
         elif event.type == pygame.KEYDOWN:
             # button is being pressed
             if event.key == pygame.K_w:
-                print('Pressed w')
+                # print('Pressed w')
                 moveScreen('w')
             elif event.key == pygame.K_s:
-                print('Pressed s')
+                # print('Pressed s')
                 moveScreen('s') 
             elif event.key == pygame.K_a:
-                print('Pressed a')
+                # print('Pressed a')
                 moveScreen('a') 
             elif event.key == pygame.K_d:
-                print('Pressed d')
+                # print('Pressed d')
                 moveScreen('d') 
     
     #Make drawn items appear

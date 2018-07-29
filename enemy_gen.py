@@ -17,7 +17,7 @@ def loadEnemies(room_arr, num_enemies):
             
             # monster stats
             stat_hp = float("{0:.2f}".format(createStats(10, 2)))
-            stat_att = float("{0:.2f}".format(createStats(2, 1)))
+            stat_att = float("{0:.2f}".format(createStats(6, 1)))
             stat_def = float("{0:.2f}".format(createStats(2, 1)))
             stat_elem = None
             crit_dmg = 1.5
@@ -47,17 +47,17 @@ def updateMut(sel_enemy):
     mut_list = sel_enemy['mutations']
     # check each mutation
     if 'Hellspawn' in mut_list:
-        sel_enemy['att'] = float("{0:.2f}".format(sel_enemy['att'] + int(createStats(2, 1))))
+        sel_enemy['att'] = sel_enemy['att'] + float("{0:.2f}".format(createStats(2, 1)))
         sel_enemy['xp'] = sel_enemy['xp'] + 2
     elif 'Friendly' in mut_list:
         sel_enemy['xp'] = sel_enemy['xp'] - 4
         sel_enemy['crit_dmg'] = 0
         sel_enemy['crit_chc'] = 0
     elif 'Spiteful' in mut_list:
-        sel_enemy['att'] = float("{0:.2f}".format(sel_enemy['att'] + int(createStats(4, 1))))
+        sel_enemy['att'] = sel_enemy['att'] + float("{0:.2f}".format(createStats(4, 1)))
         sel_enemy['xp'] = sel_enemy['xp'] + 3
     elif 'Thicc' in mut_list:  
-        sel_enemy['hp'] = float("{0:.2f}".format(int(sel_enemy['hp'] * 1.5)))
+        sel_enemy['hp'] = int(sel_enemy['hp'] * 1.5)
         sel_enemy['xp'] = sel_enemy['xp'] + 4
     elif 'Goofy' in mut_list:
         sel_enemy['def'] = sel_enemy['def'] - 5
@@ -65,30 +65,32 @@ def updateMut(sel_enemy):
     elif 'Facist' in mut_list:
         sel_enemy['xp'] = sel_enemy['xp'] + 5
     elif 'Undead' in mut_list:
-        sel_enemy['att'] = float("{0:.2f}".format(sel_enemy['att'] + int(createStats(3, 1))))
+        sel_enemy['att'] = sel_enemy['att'] + float("{0:.2f}".format(createStats(3, 1)))
         sel_enemy['def'] = sel_enemy['def'] - 2
         sel_enemy['xp'] = sel_enemy['xp'] + 3
-        sel_enemy['elem'] = 'dark'
+        sel_enemy['elem'] = 'Dark'
     elif 'Nefarious' in mut_list:
-        sel_enemy['att'] = float("{0:.2f}".format(sel_enemy['att'] + int(createStats(8, 1))))
+        sel_enemy['att'] = sel_enemy['att'] + float("{0:.2f}".format(createStats(8, 1)))
         sel_enemy['hp'] = sel_enemy['hp'] + 5
         sel_enemy['xp'] = sel_enemy['xp'] + 20
-        sel_enemy['elem'] = 'fire'
+        sel_enemy['elem'] = 'Fire'
     elif 'Useless' in mut_list:
         sel_enemy['hp'] = 5
         sel_enemy['def'] = 10
     elif 'Raid' in mut_list:
-        sel_enemy['att'] = float("{0:.2f}".format(sel_enemy['att'] + int(createStats(2, 1))))
+        sel_enemy['att'] = sel_enemy['att'] + float("{0:.2f}".format(createStats(2, 1)))
         sel_enemy['hp'] = sel_enemy['hp'] + 2
         sel_enemy['xp'] = sel_enemy['xp'] + 8
-        sel_enemy['elem'] = 'fire'
+        sel_enemy['elem'] = 'Fire'
     elif 'Dank' in mut_list:
-        sel_enemy['att'] = float("{0:.2f}".format(sel_enemy['att'] * 2))
-        sel_enemy['hp'] = float("{0:.2f}".format(sel_enemy['hp'] / 4))
+        sel_enemy['att'] = sel_enemy['att'] * 2
+        sel_enemy['hp'] = sel_enemy['hp'] / 4
         sel_enemy['def'] = 0
         sel_enemy['xp'] = sel_enemy['xp'] + 10
         sel_enemy['elem'] = 'Earth'
     
     # balance defence
-    if (sel_enemy['def'] >= 10):
-        sel_enemy['def'] = 10
+    if (sel_enemy['def'] >= 6):
+        sel_enemy['def'] = 6
+    
+
