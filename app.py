@@ -51,7 +51,7 @@ size = window_width, window_height
 fog_size = 3
 restart = False
 first_start = True
-floor = 1
+floor_number = 1
 
 dungeon_name = [
     "Valley of the Starfish",
@@ -72,16 +72,44 @@ dungeon_name = [
     "Council of Starfish"
 ]
 
+# main hero
+hero_stats = {
+    'x_loc': 0,
+    'y_loc' : 0,
+    'hp' : 30,
+    'att' : 10,
+    'def' : 8,
+    'crit_dmg' : 1.5,
+    'crit_chc' : 30,
+    'xp' : 0,
+    'mutations': [],
+    'elem' : None
+}
+
 while 1:
     # set rend to true
     rend = True
     # output starting messages
-    console_log.append({'log' : 'Floor: ' + random.choice(dungeon_name) + ' ' + str(floor), 'id' : 1})
+    console_log = []
+    console_log.append({'log' : 'Floor: '+ str(floor_number) + ' ' + random.choice(dungeon_name), 'id' : 5})
     if(first_start == True):
-        console_log.append({'log' : 'Welcome to the game! Press p to attack, wasd to move', 'id' : 1})
+        console_log.append({'log' : 'Welcome to the game! Press p to attack, wasd to move', 'id' : 5})
         first_start = False
-    elif(restart == True)
-        console_log.append({'log' : 'You restarted the game! Press p to attack, wasd to move', 'id' : 1})
+    elif(restart == True):
+        # reset hero stats
+        hero_stats = {
+            'x_loc': 0,
+            'y_loc' : 0,
+            'hp' : 30,
+            'att' : 10,
+            'def' : 8,
+            'crit_dmg' : 1.5,
+            'crit_chc' : 30,
+            'xp' : 0,
+            'mutations': [],
+            'elem' : None
+        }
+        console_log.append({'log' : 'You restarted the game! Press p to attack, wasd to move', 'id' : 5})
         restart = False
 
     mapArr = map_gen.generateMap(map_min_width, map_max_width, map_min_height, map_max_height)
@@ -89,23 +117,6 @@ while 1:
 
     print('Width, Height', mapWidth, mapHeight)
     rooms = map_gen.generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist_bw_rooms, mapWidth, mapHeight)
-
-    console_log = []
-
-    # main hero
-    hero_stats = {
-        'x_loc': 0,
-        'y_loc' : 0,
-        'hp' : 30,
-        'att' : 10,
-        'def' : 8,
-        'crit_dmg' : 1.5,
-        'crit_chc' : 30,
-        'xp' : 0,
-        'mutations': [],
-        'elem' : None
-    }
-
 
     # add rooms
     print('Loading rooms onto map')
@@ -258,6 +269,12 @@ while 1:
             float("{0:.2f}".format(enemies['def']))
         #Clear screen
         screen.fill(black) 
+        # see if standing in vicinity of goal
+        new_x = end_x-window_x_units
+        new_y = end_y-window_y_units
+        if(new_x == char_x_rel or new_x == char_x_rel + 1 or new_x == char_x_rel-1):
+            if(new_y == char_y_rel or new_y == char_y_rel + 1 or new_y == char_y_rel-1):
+                console_log.append({'log' : 'You found the exit!!!! Press f to advance to the next floor!', 'id' : 5})
         # if called either init / player made a move
         tempArr = enemy_turn.enemy_move(char_x_rel, char_y_rel, fog_size, window_x_units, window_y_units, enemyArr, mapArr)
         enemyArr = tempArr
@@ -310,6 +327,8 @@ while 1:
                 color = (255, 0, 0)
             elif log['id'] == 2:
                 color = (0, 191, 255)
+            elif log['id'] == 5:
+                color = (177, 43, 239)
 
             console_text = consolefont.render(log['log'], 1, color)
             screen.blit(console_text, (consoleX, consoleY - (count * 20)))
@@ -402,6 +421,17 @@ while 1:
             console_log.append({'log' : random.choice(list_moves), 'id' : 1})
             damage_calc.attackSurround(hero_stats, enemyArr, console_log)
             renderMap()
+        
+        # interact
+        elif(keyWASD == 'f'):
+            # see if standing in vicinity of goal
+            new_x = end_x-window_x_units
+            new_y = end_y-window_y_units
+            if(new_x == char_x_rel or new_x == char_x_rel + 1 or new_x == char_x_rel-1):
+                if(new_y == char_y_rel or new_y == char_y_rel + 1 or new_y == char_y_rel-1):
+                    # move to next floor
+                    rend = False
+                    global floor_number+=1
 
 
     # runs the game
