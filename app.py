@@ -261,8 +261,6 @@ while 1:
                 return False
         else:
             return False
-    else:
-        return False
         
 
 def renderMap():
