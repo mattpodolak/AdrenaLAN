@@ -70,7 +70,8 @@ hero_stats = {
     'crit_chc' : 30,
     'xp' : 0,
     'mutations': [],
-    'elem' : None
+    'elem' : None,
+    'weapon' : 'Fist'
 }
 
 
@@ -292,11 +293,22 @@ def renderMap():
         count = count + 1
     
     # HUD
+    # HEALTH
     for i in range(int(hero_stats['hp'])):
         hud_hp = hudfont.render('I', 1, (0, 255, 0))
         screen.blit(hud_hp, (hero_stats['x_loc'] + 1200 - (i * 10), hero_stats['y_loc'] - 5))
-
-
+    # ATT
+    hud_att = hudfont.render(str(hero_stats['att']), 1, (255, 0, 0))
+    screen.blit(hud_att, (hero_stats['x_loc'] + 1180, (hero_stats['y_loc'] + 30)))
+    # DEF
+    hud_def = hudfont.render(str(hero_stats['def']), 1, (128, 128, 128))
+    screen.blit(hud_def, (hero_stats['x_loc'] + 1190, (hero_stats['y_loc'] + 60)))
+    # XP
+    hud_xp = hudfont.render('XP: ' + str(hero_stats['xp']), 1, (0, 191, 255))
+    screen.blit(hud_xp, (hero_stats['x_loc'] + 1130, (hero_stats['y_loc'] + 90)))
+    # Current weapon
+    hud_wep = hudfont.render('Equipped: ' + str(hero_stats['weapon']), 1, (100, 100, 100))
+    screen.blit(hud_wep, (hero_stats['x_loc'] + 1048, (hero_stats['y_loc'] + 120)))    
 
     # draw enemies
     ct = 0

@@ -57,13 +57,3 @@ def damageTaken(monster, player, console):
             monster['hp'] = 0
             player['xp'] = player['xp'] + monster['xp']
             console.append({'log' : ('You gained ' +  str(monster['xp']) + ' experience. Total XP: ' + str(player['xp'])), 'id' : 2})
-            # temp_monster_arr = [enemy for enemy in monster_arr if enemy != monster]
-            # monster_arr = temp_monster_arr
-
-        # print(monster['name'], 'has', monster['hp'], 'hp remaining')
-        # print(monster_arr)
-    # else:
-    #     temp_monster_arr = [enemy for enemy in monster_arr if enemy != monster]
-    #     monster_arr = temp_monster_arr
-        # print(monster_arr)
-        # print(monster['name'], 'is already dead. No attacks made.')
