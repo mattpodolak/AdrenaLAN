@@ -25,7 +25,7 @@ def loadEnemies(room_arr, num_enemies):
             default_size = 1
             default_xp = 10
             stat_mut = setMutation()
-            enemy_arr.append({'x_loc' : x_pos, 'y_loc' : y_pos, 'hp' : stat_hp, 'att' : stat_att, 'def' : stat_def, 'elem' : stat_elem, 'crit_dmg' : crit_dmg, 'crit_chc' : crit_chc, 'mutations' : stat_mut, 'size' : default_size, 'xp' : default_xp})
+            enemy_arr.append({'name' : 'starboi', 'x_loc' : x_pos, 'y_loc' : y_pos, 'hp' : stat_hp, 'att' : stat_att, 'def' : stat_def, 'elem' : stat_elem, 'crit_dmg' : crit_dmg, 'crit_chc' : crit_chc, 'mutations' : stat_mut, 'size' : default_size, 'xp' : default_xp})
             # health, lvl, attack, xp 
     print('Enemies Loaded:', start_counter)
     return enemy_arr

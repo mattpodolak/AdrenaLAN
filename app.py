@@ -126,7 +126,7 @@ for enemy in enemyArr:
     round(enemy['hp'], 2)
     round(enemy['att'], 2)
     round(enemy['def'], 2)
-    print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'], '     HP:', enemy['hp'],'| ATT:', enemy['att'], '| DEF:', enemy['def'], '| Element', enemy['elem'], '| CDMG:', str(enemy['crit_dmg']) + 'X', '| CHC:', str(enemy['crit_chc']) + '%', '| MUTATIONS:', enemy['mutations'], '| XP:', str(enemy['xp']) + ' pts')
+    print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'], '    NAME:', enemy['name'], '| HP:', enemy['hp'],'| ATT:', enemy['att'], '| DEF:', enemy['def'], '| Element', enemy['elem'], '| CDMG:', str(enemy['crit_dmg']) + 'X', '| CHC:', str(enemy['crit_chc']) + '%', '| MUTATIONS:', enemy['mutations'], '| XP:', str(enemy['xp']) + ' pts')
 
 # hero stats
 print('HERO BASE STATS ', '     HP:', hero_stats['hp'],'| ATT:', hero_stats['att'], '| DEF:', hero_stats['def'], '| Element:', hero_stats['elem'], '| CDMG:', str(hero_stats['crit_dmg']) + 'X', '| CHC:', str(hero_stats['crit_chc']) + '%', '| MUTATIONS: ', hero_stats['mutations'], 'XP:', hero_stats['xp'])
@@ -212,10 +212,6 @@ def moveScreen(keyWASD):
             renderMap()
         else:
             print('Cant move that direction')
-
-
-
-
 
 # runs the game
 while 1:
