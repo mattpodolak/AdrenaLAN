@@ -17,7 +17,7 @@ def attackSurround(player, monster_arr, console):
 
 
 # calculates dmg done to a player
-def attack(enemy, player, monster_arr):
+def attack(enemy, player, console):
     base_att = enemy['att']
     def_rating = (int(player['def']) / 10)
     chance = random.randint(0, 100)
@@ -31,8 +31,8 @@ def attack(enemy, player, monster_arr):
     else:
         damage = round((base_att * crit_multiplier) * (def_rating), 2)
     player['hp'] = player['hp'] - damage
-    # print('You took', damage, 'damage from', enemy['name'], '!')
-    # print('HP:', player['hp'])
+    console.append({'log' : 'You took' + str(damage) + 'damage from ' + enemy['name'] + '!', 'id' : 3})
+    console.append({'log' : 'HP: ' + str(player['hp']), 'id' : 4})
 
 # calculates dmg done to an enemy
 def damageTaken(monster, player, console):

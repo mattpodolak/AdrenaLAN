@@ -227,6 +227,11 @@ def renderMap():
     # if called either init / player made a move
     tempArr = enemy_turn.enemy_move(char_x_rel, char_y_rel, fog_size, window_x_units, window_y_units, enemyArr, mapArr)
     enemyArr = tempArr
+    # enemies attack
+    for enemy in enemyArr:
+        if enemy['willAtk'] == True:
+            damage_calc.attack(enemy, hero_stats, console_log)
+
     # create rectangles
     for x in range(window_x_units, window_width_units+window_x_units):
         for y in range(window_y_units, window_height_units+window_y_units):
@@ -276,6 +281,10 @@ def renderMap():
             color = (255, 0, 0)
         elif log['id'] == 2:
             color = (0, 191, 255)
+        elif log['id'] == 3:
+            color = (255, 69, 0)
+        elif log['id'] == 4:
+            color = (0, 255, 0)
 
         console_text = consolefont.render(log['log'], 1, color)
         screen.blit(console_text, (consoleX, consoleY - (count * 20)))
