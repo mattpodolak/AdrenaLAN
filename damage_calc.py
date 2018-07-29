@@ -48,7 +48,7 @@ def damageTaken(monster, player, console):
         if def_rating == 0:
             def_rating = 0.5
         damage = (base_att * crit_multiplier) * def_rating
-        console.append(str(damage) + ' damage dealt to' +  str(monster['name']))
+        console.append(str(damage) + ' damage dealt to ' +  str(monster['name']))
         
         monster['hp'] = monster['hp'] - damage
 
