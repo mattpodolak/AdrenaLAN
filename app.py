@@ -101,6 +101,19 @@ for path in paths:
     y = path['y_loc']
     mapArr[x, y] = 0
 
+# add walls for paths
+for x in range(1, mapWidth-2):
+    for y in range(1, mapHeight-2):
+        if(mapArr[x, y] == 0):
+            if(mapArr[x, y+1] == 1):
+                mapArr[x, y+1] = 2
+            if(mapArr[x+1, y] == 1):
+                mapArr[x+1, y] = 2
+            if(mapArr[x, y-1] == 1):
+                mapArr[x, y-1] = 2
+            if(mapArr[x-1, y] == 1):
+                mapArr[x-1, y] = 2
+
 # LOAD ENEMIES
 enemyArr = enemy_gen.loadEnemies(rooms, max_rooms * 2)
 for enemy in enemyArr:
