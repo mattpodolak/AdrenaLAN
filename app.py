@@ -53,6 +53,20 @@ mapWidth, mapHeight = mapArr.shape
 print('Width, Height', mapWidth, mapHeight)
 rooms = map_gen.generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist_bw_rooms, mapWidth, mapHeight)
 
+
+# main hero
+hero_stats = {
+    'hp' : 20,
+    'att' : 8,
+    'def' : 8,
+    'crit_dmg' : 1.5,
+    'crit_chc' : 30,
+    'xp' : 0,
+    'mutations': [],
+    'elem' : None
+}
+
+
 # add rooms
 print('Loading rooms onto map')
 for room in rooms:
@@ -108,7 +122,8 @@ for path in paths:
 enemyArr = enemy_gen.loadEnemies(rooms, max_rooms * 2)
 for enemy in enemyArr:
     # enemy_arr.append({'x_loc' : x_pos, 'y_loc' : y_pos, 'hp' : stat_hp, 'att' : stat_att, 'elem' : stat_elem, 'crit_dmg' : crit_dmg, 'crit_chc' : crit_chc, 'mutations' : stat_mut, 'size' : default_size})
-    print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'], '     HP:', enemy['hp'],'| ATT:', enemy['att'],'| Element', enemy['elem'], '| CDMG:', str(enemy['crit_dmg']) + 'X', '| CHC:', str(enemy['crit_chc']) + '%', '| MUTATIONS: ', enemy['mutations'])
+    enemy_gen.updateMut(enemy)
+    print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'], '     HP:', enemy['hp'],'| ATT:', enemy['att'], '| DEF:', enemy['def'], '| Element', enemy['elem'], '| CDMG:', str(enemy['crit_dmg']) + 'X', '| CHC:', str(enemy['crit_chc']) + '%', '| MUTATIONS: ', enemy['mutations'])
 
 
 # Create graphical window
@@ -154,6 +169,9 @@ def renderMap():
         screen.blit(starfish, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
         screen.blit(showStats_HP, (new_x*unit_size - (1.2*unit_size), new_y*unit_size - (0.8*unit_size)))
         screen.blit(showStats_ATT, (new_x*unit_size + (0.6*unit_size), new_y*unit_size - (0.8*unit_size)))
+    
+    print('HERO BASE STATS ', '     HP:', hero_stats['hp'],'| ATT:', hero_stats['att'], '| DEF:', hero_stats['def'], '| Element:', hero_stats['elem'], '| CDMG:', str(hero_stats['crit_dmg']) + 'X', '| CHC:', str(hero_stats['crit_chc']) + '%', '| MUTATIONS: ', hero_stats['mutations'], 'XP:', hero_stats['xp'])
+
 
 renderMap()
 
