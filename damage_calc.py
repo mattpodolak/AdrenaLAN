@@ -1,5 +1,21 @@
 import random
 
+def attackSurround(player, monster_arr, console):
+    fail_move = ['You hit nothing...', 'Wow the air felt that one...', 'You should get your eyes checked mate.', 'What are you looking for?']
+    enemy_around = []
+    char_x = player['x_loc']
+    char_y = player['y_loc']
+    # add all enemies in range
+    for enemy in monster_arr:
+        if((enemy['x_loc'] <= char_x + 1) and (enemy['x_loc'] >= char_x - 1)) and ((enemy['y_loc'] <= char_y + 1) and (enemy['y_loc'] >= char_y - 1)):
+            enemy_around.append(enemy)
+    # damage all enemies
+    for enemy_near in enemy_around:
+        damageTaken(enemy_near, player, console)
+    if not enemy_around:
+        console.append({'log' : random.choice(fail_move), 'id' : 0})
+
+
 # calculates dmg done to a player
 def attack(enemy, player, monster_arr):
     base_att = enemy['att']
@@ -15,97 +31,39 @@ def attack(enemy, player, monster_arr):
     else:
         damage = round((base_att * crit_multiplier) * (def_rating), 2)
     player['hp'] = player['hp'] - damage
-    print('You took', damage, 'damage from', enemy['name'], '!')
-    print('HP:', player['hp'])
+    # print('You took', damage, 'damage from', enemy['name'], '!')
+    # print('HP:', player['hp'])
 
 # calculates dmg done to an enemy
-def damageTaken(monster, player, monster_arr):
+def damageTaken(monster, player, console):
     if monster['hp'] > 0:
         base_att = player['att']
-        def_rating = int(monster['def']) / 10
+        def_rating = int(abs(monster['def'])) / 10
         chance = random.randint(0, 100)
         if chance <= player['crit_chc']:
             # crit occurs
             crit_multiplier = player['crit_dmg']
         else:
             crit_multiplier = 1
-        damage = round((base_att * crit_multiplier) * def_rating, 2)
-        print(damage, 'damage dealt.')
+        if def_rating == 0:
+            def_rating = 0.5
+        damage = (base_att * crit_multiplier) * def_rating
+        console.append({'log' : (str(damage) + ' damage dealt to ' +  str(monster['name'])), 'id' : 1})
+        
         monster['hp'] = monster['hp'] - damage
 
         if monster['hp'] <= 0:
             # monster dead
             monster['hp'] = 0
             player['xp'] = player['xp'] + monster['xp']
-            print('You gained', monster['xp'], 'experience.')
-            temp_monster_arr = [enemy for enemy in monster_arr if enemy != monster]
-            monster_arr = temp_monster_arr
+            console.append({'log' : ('You gained ' +  str(monster['xp']) + ' experience. Total XP: ' + str(player['xp'])), 'id' : 2})
+            # temp_monster_arr = [enemy for enemy in monster_arr if enemy != monster]
+            # monster_arr = temp_monster_arr
 
-        print(monster['name'], 'has', monster['hp'], 'hp remaining')
-        print(monster_arr)
-    else:
-        temp_monster_arr = [enemy for enemy in monster_arr if enemy != monster]
-        monster_arr = temp_monster_arr
-        print(monster_arr)
-        print(monster['name'], 'is already dead. No attacks made.')
-
-
-default_p1 ={
-    'hp' : 30,
-    'att' : 10,
-    'def' : 8,
-    'crit_dmg' : 1.5,
-    'crit_chc' : 30,
-    'xp' : 0,
-    'mutations': [],
-    'elem' : None
-}
-
-monster_1 ={
-    'name': 'badboi',
-    'hp' : 10,
-    'att' : 6,
-    'def' : 3,
-    'crit_dmg' : 1.5,
-    'crit_chc' : 25,
-    'xp' : 18,
-    'mutations': ['Raid'],
-    'elem' : None
-}
-
-
-monster_2 ={
-    'name' : 'spookyboi',
-    'hp' : 8,
-    'att' : 4,
-    'def' : 8,
-    'crit_dmg' : 2.5,
-    'crit_chc' : 25,
-    'xp' : 10,
-    'mutations': ['Raid'],
-    'elem' : None
-}
-
-monster_arr = []
-monster_arr.append(monster_1)
-monster_arr.append(monster_2)
-print(monster_arr)
-
-
-print('\n')
-damageTaken(monster_1, default_p1, monster_arr)
-print('\n')
-damageTaken(monster_1, default_p1, monster_arr)
-print('\n')
-if monster_1['hp'] == 0:
-    damageTaken(monster_2, default_p1, monster_arr)
-else:
-    damageTaken(monster_1, default_p1, monster_arr)
-print('\n')
-damageTaken(monster_2, default_p1, monster_arr)
-print('\n')
-damageTaken(monster_2, default_p1, monster_arr)
-print('\n')
-damageTaken(monster_2, default_p1, monster_arr)
-print('Total XP:', default_p1['xp'])
-print('________________________________________________________________________________________________________________')
+        # print(monster['name'], 'has', monster['hp'], 'hp remaining')
+        # print(monster_arr)
+    # else:
+    #     temp_monster_arr = [enemy for enemy in monster_arr if enemy != monster]
+    #     monster_arr = temp_monster_arr
+        # print(monster_arr)
+        # print(monster['name'], 'is already dead. No attacks made.')

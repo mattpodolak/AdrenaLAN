@@ -11,8 +11,8 @@ def enemy_move(char_x_rel, char_y_rel, fog_size, window_x_units, window_y_units,
     for enemy in enemyArr:
         tempEnemy = enemy
 
-        x_rel = enemy['x_loc'] - window_x_units
-        y_rel = enemy['y_loc'] - window_y_units
+        x_rel = tempEnemy['x_loc'] - window_x_units
+        y_rel = tempEnemy['y_loc'] - window_y_units
         tempEnemy['willAtk']=False
 
         # make a move if in non fog
@@ -40,8 +40,6 @@ def dist(x1, x2, y1, y2):
     
     return math.sqrt(distX + distY)            
 
-
-
 def validMoves(x, y, enemyArr, mapArr, char_x, char_y):
     check = []
     if(mapArr[x, y+1] == 0):
@@ -54,21 +52,17 @@ def validMoves(x, y, enemyArr, mapArr, char_x, char_y):
         check.append({'x':x-1, 'y':y})
     
     minDist = 1000
-    minpair_x = x
-    minpair_y = y
+    minpair = {'x':x, 'y':y}
     for pair in check:
         # dont walk onto other enemies
         if checkForEnemy(pair['x'], pair['y'], enemyArr):
             distance = dist(pair['x'], char_x, pair['y'], char_y)
 
             if distance < minDist:
-                minpair_x = pair['x']
-                minpair_y = pair['y']
+                minpair = pair
                 minDist = distance
     
-    return minpair_x, minpair_y
-
-
+    return minpair['x'], minpair['y']
 
 def checkForEnemy(x, y, enemyArr):
     # return false if enemy occupying space
