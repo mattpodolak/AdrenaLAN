@@ -17,16 +17,19 @@ def enemy_move(char_x_rel, char_y_rel, fog_size, window_x_units, window_y_units,
 
         # make a move if in non fog
         if((x_rel >= fog_x and x_rel <= fog_x2) and (y_rel >= fog_y and y_rel <= fog_y2)):
+            x = enemy['x_loc']
+            y = enemy['y_loc']
+
             # check if can attack
             if((char_x_rel == x_rel and (char_y_rel == y_rel+1 or char_y_rel == y_rel-1)) or (char_y_rel == y_rel and (char_x_rel == x_rel+1 or char_x_rel == x_rel-1))):
                 tempEnemy['willAtk']=True
             
             else:
                 #check for move
-                new_x, new_y = validMoves(x_rel, y_rel, enemyArr, mapArr, char_x_rel, char_y_rel)
-                # tempEnemy['x_loc'] = new_x
-                # tempEnemy['y_loc'] = new_y
-                tempEnemy.update({'x_loc': new_x+window_x_units, 'y_loc': new_y+window_y_units})
+                char_x = char_x_rel + window_x_units
+                char_y = char_y_rel + window_y_units
+                new_x, new_y = validMoves(x, y, enemyArr, mapArr, char_x, char_y)
+                tempEnemy.update({'x_loc': new_x, 'y_loc': new_y})
         tempArr.append(tempEnemy)
     return tempArr
             
@@ -39,7 +42,7 @@ def dist(x1, x2, y1, y2):
 
 
 
-def validMoves(x, y, enemyArr, mapArr, char_x_rel, char_y_rel):
+def validMoves(x, y, enemyArr, mapArr, char_x, char_y):
     check = []
     if(mapArr[x, y+1] == 0):
         check.append({'x':x, 'y':y+1})
@@ -56,7 +59,7 @@ def validMoves(x, y, enemyArr, mapArr, char_x_rel, char_y_rel):
     for pair in check:
         # dont walk onto other enemies
         if checkForEnemy(pair['x'], pair['y'], enemyArr):
-            distance = dist(pair['x'], char_x_rel, pair['y'], char_y_rel)
+            distance = dist(pair['x'], char_x, pair['y'], char_y)
 
             if distance < minDist:
                 minpair_x = pair['x']
