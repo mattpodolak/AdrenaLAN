@@ -1,12 +1,14 @@
-import sys, pygame, map_gen, path_gen2, start_end, enemy_gen, enemy_turn
+import sys, pygame, map_gen, path_gen2, start_end, enemy_gen, damage_calc, enemy_turn
 import numpy as np
 import pygame.surfarray as surfarray
 import pygame
+import random
 
 #pylint shows as an errror
 pygame.init()
 pygame.font.init()
 myfont = pygame.font.SysFont('Comic Sans MS', 12)
+consolefont = pygame.font.SysFont('Comic Sans MS', 16)
 
 '''
 
@@ -54,9 +56,12 @@ mapWidth, mapHeight = mapArr.shape
 print('Width, Height', mapWidth, mapHeight)
 rooms = map_gen.generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist_bw_rooms, mapWidth, mapHeight)
 
+console_log = []
 
 # main hero
 hero_stats = {
+    'x_loc': 0,
+    'y_loc' : 0,
     'hp' : 30,
     'att' : 10,
     'def' : 8,
@@ -171,9 +176,10 @@ def checkForEnemy(x, y):
         en_x = enemy['x_loc']
         en_y = enemy['y_loc']
         if(en_x == x and en_y == y):
-            print('Enemy in the way')
+            console_log.append({'log' : 'Enemy in the way', 'id' : 0})
+            damage_calc.attackSurround(hero_stats, enemyArr, console_log)
+            renderMap()
             return False
-    
     return True
     
 def validMove(move):
@@ -181,25 +187,25 @@ def validMove(move):
     arrayLoc_y = window_y_units + char_y_rel
 
     if(move == 'w' and arrayLoc_y != 0):
-        print('next move ', mapArr[arrayLoc_x, arrayLoc_y-1])
+        # print('next move ', mapArr[arrayLoc_x, arrayLoc_y-1])
         if(mapArr[arrayLoc_x, arrayLoc_y-1] == 0):
             return checkForEnemy(arrayLoc_x, arrayLoc_y-1)
         else:
             return False
     elif(move == 's' and arrayLoc_y != mapHeight):
-        print('next move ', mapArr[arrayLoc_x, arrayLoc_y+1])
+        # print('next move ', mapArr[arrayLoc_x, arrayLoc_y+1])
         if(mapArr[arrayLoc_x, arrayLoc_y+1] == 0):
             return checkForEnemy(arrayLoc_x, arrayLoc_y+1)
         else:
             return False
     elif(move == 'a' and arrayLoc_x != 0):
-        print('next move ', mapArr[arrayLoc_x-1, arrayLoc_y])
+        # print('next move ', mapArr[arrayLoc_x-1, arrayLoc_y])
         if(mapArr[arrayLoc_x-1, arrayLoc_y] == 0):
             return checkForEnemy(arrayLoc_x-1, arrayLoc_y)
         else:
             return False
     elif(move == 'd' and arrayLoc_x != mapWidth):
-        print('next move ', mapArr[arrayLoc_x+1, arrayLoc_y])
+        # print('next move ', mapArr[arrayLoc_x+1, arrayLoc_y])
         if(mapArr[arrayLoc_x+1, arrayLoc_y] == 0):
             return checkForEnemy(arrayLoc_x+1, arrayLoc_y)
         else:
@@ -210,6 +216,12 @@ def validMove(move):
 
 def renderMap():
     global enemyArr
+    for enemies in enemyArr:
+        if enemies['hp'] <= 0:
+            enemyArr.remove(enemies)
+        float("{0:.2f}".format(enemies['hp']))
+        float("{0:.2f}".format(enemies['att']))
+        float("{0:.2f}".format(enemies['def']))
     #Clear screen
     screen.fill(black) 
     # if called either init / player made a move
@@ -246,8 +258,29 @@ def renderMap():
     if((new_x >= fog_x and new_x <= fog_x2)and (new_y >= fog_y and new_y <= fog_y2)):
         screen.blit(goal, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
 
-    # draw character
+    # draw hero
+    hero_stats['x_loc'] = char_x_rel + window_x_units
+    hero_stats['y_loc'] = char_y_rel + window_y_units
     screen.blit(char, (char_x_rel*unit_size, char_y_rel*unit_size, unit_size, unit_size))
+
+
+    # console log
+    # id 0 = passive, 1 = combat, 2 = xp
+    count = 0
+    for log in reversed(console_log):
+        consoleX = hero_stats['x_loc'] - 5
+        consoleY = hero_stats['y_loc'] + 500
+        if log['id'] == 0:
+            color = (255, 255, 0)
+        elif log['id'] == 1:
+            color = (255, 0, 0)
+        elif log['id'] == 2:
+            color = (0, 191, 255)
+
+        console_text = consolefont.render(log['log'], 1, color)
+        screen.blit(console_text, (consoleX, consoleY - (count * 20)))
+        count = count + 1
+
 
     # draw enemies
     ct = 0
@@ -268,6 +301,11 @@ def renderMap():
                 screen.blit(ogre, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
             screen.blit(showStats_HP, (new_x*unit_size + (0.1*unit_size), new_y*unit_size - (0.4*unit_size)))
 
+    # nextArr = enemy_turn.enemy_move(char_x_rel, char_y_rel, fog_size, window_x_units, window_y_units, enemyArr, mapArr)
+    # for i in range(len(nextArr)):
+    #     enemyArr[i]['x_loc'] = nextArr[i]['x_loc']
+    #     enemyArr[i]['y_loc'] = nextArr[i]['y_loc']
+
 renderMap()
 
 def moveScreen(keyWASD):
@@ -275,6 +313,7 @@ def moveScreen(keyWASD):
     global window_y_units
     global char_x_rel
     global char_y_rel
+    list_moves = ['Slash!', 'Stab!', 'Cleave!', 'Charge!']
 
     if(keyWASD == 'w'):
         # check if move is possible
@@ -324,6 +363,13 @@ def moveScreen(keyWASD):
         else:
             print('Cant move that direction')
 
+    # attack move
+    elif(keyWASD == 'p'):
+        console_log.append({'log' : random.choice(list_moves), 'id' : 1})
+        damage_calc.attackSurround(hero_stats, enemyArr, console_log)
+        renderMap()
+
+
 # runs the game
 while 1:
     for event in pygame.event.get():
@@ -344,7 +390,10 @@ while 1:
                 moveScreen('a') 
             elif event.key == pygame.K_d:
                 # print('Pressed d')
-                moveScreen('d') 
+                moveScreen('d')
+            elif event.key == pygame.K_p:
+                # attack
+                moveScreen('p') 
     
     #Make drawn items appear
     pygame.display.flip()
