@@ -28,7 +28,10 @@ def path(rooms):
             if(abs(delt_y) < abs(delt_x)):
                 if(delt_y > 0):
                     # start on bottom, pick pixel to start at
-                    start_pt_x = random.randint(x+1, x-1+width)
+                    try:
+                        start_pt_x = random.randint(x+1, x-1+width)
+                    except:
+                        start_pt_x = x+1
                     start_pt_y = y+height
                     if delt_x > 0:
                         # land on left of block 2
@@ -48,7 +51,10 @@ def path(rooms):
                         pathArr = createPath(pathArr, 'bottom', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
                 else:
                     # start on top, pick pixel to start at
-                    start_pt_x = random.randint(x+1, x-1+width)
+                    try:
+                        start_pt_x = random.randint(x+1, x-1+width)
+                    except:
+                        start_pt_x = x+1
                     start_pt_y = y
                     if delt_x > 0:
                         # land on left of block 2
@@ -69,7 +75,10 @@ def path(rooms):
             else:
                 if(delt_x > 0):
                     # start on right, pick pixel to start at
-                    start_pt_y = random.randint(y+1, y+height-1)
+                    try:
+                        start_pt_y = random.randint(y+1, y+height-1)
+                    except:
+                        start_pt_y = y+1
                     start_pt_x = x+width-1
                     if delt_y > 0:
                         # land on top of block 2
@@ -88,7 +97,10 @@ def path(rooms):
                     pathArr = createPath(pathArr, 'right', start_pt_x, start_pt_y, end_pt_x, end_pt_y)
                 else:
                     # start on left, pick pixel to start at
-                    start_pt_y = random.randint(y+1, y-1+height)
+                    try:
+                        start_pt_y = random.randint(y+1, y+height-1)
+                    except:
+                        start_pt_y = y+1
                     start_pt_x = x
                     if delt_y > 0:
                         # land on top of block 2

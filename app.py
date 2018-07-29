@@ -96,6 +96,8 @@ while 1:
         console_log.append({'log' : 'G00d luck! Press p to attack, wasd to move, r to restart', 'id' : 5})
         first_start = False
     elif(restart == True):
+        # reset floor num
+        floor_number = 1
         # reset hero stats
         hero_stats = {
             'x_loc': 0,
@@ -269,12 +271,11 @@ while 1:
             float("{0:.2f}".format(enemies['def']))
         #Clear screen
         screen.fill(black) 
-        # see if standing in vicinity of goal
+        # see if standing on goal
         new_x = end_x-window_x_units
         new_y = end_y-window_y_units
-        if(new_x == char_x_rel or new_x == char_x_rel + 1 or new_x == char_x_rel-1):
-            if(new_y == char_y_rel or new_y == char_y_rel + 1 or new_y == char_y_rel-1):
-                console_log.append({'log' : 'You found the exit!!!! Press f to advance to the next floor!', 'id' : 5})
+        if(new_x == char_x_rel and new_y == char_y_rel):
+            console_log.append({'log' : 'You found the exit!!!! Press f to advance to the next floor!', 'id' : 5})
         # if called either init / player made a move
         tempArr = enemy_turn.enemy_move(char_x_rel, char_y_rel, fog_size, window_x_units, window_y_units, enemyArr, mapArr)
         enemyArr = tempArr
@@ -430,6 +431,7 @@ while 1:
             if(new_x == char_x_rel or new_x == char_x_rel + 1 or new_x == char_x_rel-1):
                 if(new_y == char_y_rel or new_y == char_y_rel + 1 or new_y == char_y_rel-1):
                     # move to next floor
+                    global rend
                     rend = False
                     global floor_number
                     floor_number+=1
