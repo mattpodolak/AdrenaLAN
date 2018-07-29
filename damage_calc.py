@@ -1,5 +1,18 @@
 import random
 
+def attackSurround(player, monster_arr):
+    enemy_around = []
+    char_x = player['x_loc']
+    char_y = player['y_loc']
+    # add all enemies in range
+    for enemy in monster_arr:
+        if((enemy['x_loc'] <= char_x + 2) and (enemy['x_loc'] >= char_x - 2)) and ((enemy['y_loc'] <= char_y + 2) and (enemy['y_loc'] >= char_y - 2)):
+            enemy_around.append(enemy)
+    # damage all enemies
+    for enemy_near in enemy_around:
+        damageTaken(enemy_near, player, monster_arr)
+
+
 # calculates dmg done to a player
 def attack(enemy, player, monster_arr):
     base_att = enemy['att']
@@ -48,64 +61,3 @@ def damageTaken(monster, player, monster_arr):
         monster_arr = temp_monster_arr
         print(monster_arr)
         print(monster['name'], 'is already dead. No attacks made.')
-
-
-default_p1 ={
-    'hp' : 30,
-    'att' : 10,
-    'def' : 8,
-    'crit_dmg' : 1.5,
-    'crit_chc' : 30,
-    'xp' : 0,
-    'mutations': [],
-    'elem' : None
-}
-
-monster_1 ={
-    'name': 'badboi',
-    'hp' : 10,
-    'att' : 6,
-    'def' : 3,
-    'crit_dmg' : 1.5,
-    'crit_chc' : 25,
-    'xp' : 18,
-    'mutations': ['Raid'],
-    'elem' : None
-}
-
-
-monster_2 ={
-    'name' : 'spookyboi',
-    'hp' : 8,
-    'att' : 4,
-    'def' : 8,
-    'crit_dmg' : 2.5,
-    'crit_chc' : 25,
-    'xp' : 10,
-    'mutations': ['Raid'],
-    'elem' : None
-}
-
-monster_arr = []
-monster_arr.append(monster_1)
-monster_arr.append(monster_2)
-print(monster_arr)
-
-
-print('\n')
-damageTaken(monster_1, default_p1, monster_arr)
-print('\n')
-damageTaken(monster_1, default_p1, monster_arr)
-print('\n')
-if monster_1['hp'] == 0:
-    damageTaken(monster_2, default_p1, monster_arr)
-else:
-    damageTaken(monster_1, default_p1, monster_arr)
-print('\n')
-damageTaken(monster_2, default_p1, monster_arr)
-print('\n')
-damageTaken(monster_2, default_p1, monster_arr)
-print('\n')
-damageTaken(monster_2, default_p1, monster_arr)
-print('Total XP:', default_p1['xp'])
-print('________________________________________________________________________________________________________________')

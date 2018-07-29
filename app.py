@@ -1,4 +1,4 @@
-import sys, pygame, map_gen, path_gen2, start_end, enemy_gen
+import sys, pygame, map_gen, path_gen2, start_end, enemy_gen, damage_calc
 import numpy as np
 import pygame.surfarray as surfarray
 import pygame
@@ -57,6 +57,8 @@ rooms = map_gen.generateRooms(min_rooms, max_rooms, min_size, max_size, min_dist
 
 # main hero
 hero_stats = {
+    'x_loc': 0,
+    'y_loc' : 0,
     'hp' : 30,
     'att' : 10,
     'def' : 8,
@@ -173,7 +175,6 @@ def checkForEnemy(x, y):
         if(en_x == x and en_y == y):
             print('Enemy in the way')
             return False
-    
     return True
     
 def validMove(move):
@@ -209,6 +210,10 @@ def validMove(move):
         
 
 def renderMap():
+
+    for enemies in enemyArr:
+        if enemies['hp'] == 0:
+            enemyArr.remove(enemies)
     #Clear screen
     screen.fill(black) 
     # if called either init / player made a move
@@ -241,7 +246,7 @@ def renderMap():
         for y in range(0, window_height_units):
             # draw antifog of war
             if((x >= fog_x and x <= fog_x2) and (y >= fog_y and y <= fog_y2)):
-                print('')
+                print('something')
             else:
                 screen.blit(fog, (x*unit_size, y*unit_size, unit_size, unit_size))
 
@@ -249,7 +254,9 @@ def renderMap():
     if((new_x >= fog_x and new_x <= fog_x2)and (new_y >= fog_y and new_y <= fog_y2)):
         screen.blit(goal, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
 
-    # draw character
+    # draw hero
+    hero_stats['x_loc'] = char_x_rel + window_x_units
+    hero_stats['y_loc'] = char_y_rel + window_y_units
     screen.blit(char, (char_x_rel*unit_size, char_y_rel*unit_size, unit_size, unit_size))
 
     # draw enemies
@@ -324,6 +331,14 @@ def moveScreen(keyWASD):
         else:
             print('Cant move that direction')
 
+    # attack move
+    elif(keyWASD == 'p'):
+        print(hero_stats['x_loc'], ',', hero_stats['y_loc'])
+        print('ATTACK!')
+        damage_calc.attackSurround(hero_stats, enemyArr)
+        renderMap()
+
+
 # runs the game
 while 1:
     for event in pygame.event.get():
@@ -344,7 +359,10 @@ while 1:
                 moveScreen('a') 
             elif event.key == pygame.K_d:
                 # print('Pressed d')
-                moveScreen('d') 
+                moveScreen('d')
+            elif event.key == pygame.K_p:
+                # attack
+                moveScreen('p') 
     
     #Make drawn items appear
     pygame.display.flip()
