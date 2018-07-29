@@ -294,7 +294,7 @@ def renderMap():
     # HUD
     for i in range(int(hero_stats['hp'])):
         hud_hp = hudfont.render('I', 1, (0, 255, 0))
-        screen.blit(hud_hp, (hero_stats['x_loc'] + 1200 - (i * 20), hero_stats['y_loc'] - 5))
+        screen.blit(hud_hp, (hero_stats['x_loc'] + 1200 - (i * 10), hero_stats['y_loc'] - 5))
 
 
 
