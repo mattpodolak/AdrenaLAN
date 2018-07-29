@@ -31,7 +31,7 @@ def attack(enemy, player, console):
     else:
         damage = round((base_att * crit_multiplier) * (def_rating), 2)
     player['hp'] = player['hp'] - damage
-    console.append({'log' : 'You took' + str(damage) + 'damage from ' + enemy['name'] + '!', 'id' : 3})
+    console.append({'log' : 'You took ' + str(damage) + ' damage from ' + enemy['name'] + '!', 'id' : 3})
     console.append({'log' : 'HP: ' + str(player['hp']), 'id' : 4})
 
 # calculates dmg done to an enemy

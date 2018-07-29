@@ -9,6 +9,7 @@ pygame.init()
 pygame.font.init()
 myfont = pygame.font.SysFont('Comic Sans MS', 12)
 consolefont = pygame.font.SysFont('Comic Sans MS', 16)
+hudfont = pygame.font.SysFont('Arial', 30)
 
 '''
 
@@ -62,7 +63,7 @@ console_log = []
 hero_stats = {
     'x_loc': 0,
     'y_loc' : 0,
-    'hp' : 30,
+    'hp' : 50,
     'att' : 10,
     'def' : 8,
     'crit_dmg' : 1.5,
@@ -289,6 +290,12 @@ def renderMap():
         console_text = consolefont.render(log['log'], 1, color)
         screen.blit(console_text, (consoleX, consoleY - (count * 20)))
         count = count + 1
+    
+    # HUD
+    for i in range(int(hero_stats['hp'])):
+        hud_hp = hudfont.render('I', 1, (0, 255, 0))
+        screen.blit(hud_hp, (hero_stats['x_loc'] + 1200 - (i * 20), hero_stats['y_loc'] - 5))
+
 
 
     # draw enemies
