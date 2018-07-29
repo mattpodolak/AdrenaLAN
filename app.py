@@ -278,8 +278,8 @@ def renderMap():
     # id 0 = passive, 1 = combat, 2 = xp
     count = 0
     for log in reversed(console_log):
-        consoleX = hero_stats['x_loc'] - 5
-        consoleY = hero_stats['y_loc'] + 500
+        consoleX = 5
+        consoleY = window_height - 40
         if log['id'] == 0:
             color = (255, 255, 0)
         elif log['id'] == 1:
@@ -296,24 +296,27 @@ def renderMap():
         count = count + 1
     
     # 
+    hudX = window_width - 30
+    hudY = 10
     # HEALTH
     for i in range(int(hero_stats['hp'])):
         hud_hp = hudfont.render('I', 1, (0, 255, 0))
-        screen.blit(hud_hp, (hero_stats['x_loc'] + 1200 - (i * 10), hero_stats['y_loc'] - 5))
+        screen.blit(hud_hp, (hudX - (i * 10), hudY))
+
     # ATTHUD
     hud_att = hudfont.render(str(hero_stats['att']), 1, (255, 0, 0))
-    screen.blit(hud_att, (hero_stats['x_loc'] + 1180, (hero_stats['y_loc'] + 30)))
-    screen.blit(att_icon, (hero_stats['x_loc'] + 1150, (hero_stats['y_loc'] + 30)))
+    screen.blit(hud_att, (hudX - 20, hudY + 40))
+    screen.blit(att_icon, (hudX - 50, hudY + 40))
     # DEF
     hud_def = hudfont.render(str(hero_stats['def']), 1, (128, 128, 128))
-    screen.blit(hud_def, (hero_stats['x_loc'] + 1180, (hero_stats['y_loc'] + 60)))
-    screen.blit(def_icon, (hero_stats['x_loc'] + 1150, (hero_stats['y_loc'] + 60)))
+    screen.blit(hud_def, (hudX - 20, hudY + 70))
+    screen.blit(def_icon, (hudX - 50, hudY + 70))
     # XP
     hud_xp = hudfont.render('XP: ' + str(hero_stats['xp']), 1, (0, 191, 255))
-    screen.blit(hud_xp, (hero_stats['x_loc'] + 1130, (hero_stats['y_loc'] + 90)))
+    screen.blit(hud_xp, (hudX - 62, hudY + 100))
     # Current weapon
     hud_wep = hudfont.render('Equipped: ' + str(hero_stats['weapon']), 1, (100, 100, 100))
-    screen.blit(hud_wep, (hero_stats['x_loc'] + 1048, (hero_stats['y_loc'] + 120)))    
+    screen.blit(hud_wep, (hudX - 150,  hudY + 130))    
 
     # draw enemies
     ct = 0
