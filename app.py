@@ -118,15 +118,16 @@ for path in paths:
     y = path['y_loc']
     mapArr[x, y] = 0
 
+enemyArr = []
 # LOAD ENEMIES
-enemyArr = enemy_gen.loadEnemies(rooms, max_rooms * 2)
+enemyArr.extend(enemy_gen.loadEnemies(rooms, max_rooms, 'Starboi'))
 for enemy in enemyArr:
     # enemy_arr.append({'x_loc' : x_pos, 'y_loc' : y_pos, 'hp' : stat_hp, 'att' : stat_att, 'elem' : stat_elem, 'crit_dmg' : crit_dmg, 'crit_chc' : crit_chc, 'mutations' : stat_mut, 'size' : default_size})
     enemy_gen.updateMut(enemy)
     round(enemy['hp'], 2)
     round(enemy['att'], 2)
     round(enemy['def'], 2)
-    print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'], '    NAME:', enemy['name'], '| HP:', enemy['hp'],'| ATT:', enemy['att'], '| DEF:', enemy['def'], '| Element', enemy['elem'], '| CDMG:', str(enemy['crit_dmg']) + 'X', '| CHC:', str(enemy['crit_chc']) + '%', '| MUTATIONS:', enemy['mutations'], '| XP:', str(enemy['xp']) + ' pts')
+    print('MONSTER:', enemy['name'], '| HP:', enemy['hp'],'| ATT:', enemy['att'], '| DEF:', enemy['def'], '| Element', enemy['elem'], '| CDMG:', str(enemy['crit_dmg']) + 'X', '| CHC:', str(enemy['crit_chc']) + '%', '| MUTATIONS:', enemy['mutations'], '| XP:', str(enemy['xp']) + ' pts')
 
 # hero stats
 print('HERO BASE STATS ', '     HP:', hero_stats['hp'],'| ATT:', hero_stats['att'], '| DEF:', hero_stats['def'], '| Element:', hero_stats['elem'], '| CDMG:', str(hero_stats['crit_dmg']) + 'X', '| CHC:', str(hero_stats['crit_chc']) + '%', '| MUTATIONS: ', hero_stats['mutations'], 'XP:', hero_stats['xp'])
@@ -171,7 +172,12 @@ def renderMap():
         showStats_HP = myfont.render('HP: '+str(enemy['hp']), 1, (255, 0, 0))
         new_x = enemy['x_loc']-window_x_units
         new_y = enemy['y_loc']-window_y_units
-        screen.blit(starfish, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+        if (enemy['name'] == 'Starboi'):
+            screen.blit(starfish, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+        # elif (enemy['name'] == 'Demondog'):
+        #     # do nothing for now
+        # elif (enemy['name'] == 'Hells Janitor'):
+        #     # do nothing for now
         screen.blit(showStats_HP, (new_x*unit_size - (0.3*unit_size), new_y*unit_size - (0.8*unit_size)))
     
 
