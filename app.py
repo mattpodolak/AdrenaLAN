@@ -250,10 +250,13 @@ def renderMap():
     screen.blit(char, (char_x_rel*unit_size, char_y_rel*unit_size, unit_size, unit_size))
 
     # draw enemies
+    ct = 0
     for enemy in enemyArr:
         showStats_HP = myfont.render('HP: '+str(enemy['hp']), 1, (255, 0, 0))
         new_x = enemy['x_loc']-window_x_units
         new_y = enemy['y_loc']-window_y_units
+        print(ct, enemy['x_loc'], enemy['y_loc'])
+        ct+=1
     
         # if not in the fog display
         if((new_x >= fog_x and new_x <= fog_x2)and (new_y >= fog_y and new_y <= fog_y2)):
