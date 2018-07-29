@@ -119,6 +119,7 @@ for path in paths:
     y = path['y_loc']
     mapArr[x, y] = 0
 
+
 # add walls for paths
 for x in range(1, mapWidth-2):
     for y in range(1, mapHeight-2):
@@ -133,14 +134,17 @@ for x in range(1, mapWidth-2):
                 mapArr[x-1, y] = 2
 
 # LOAD ENEMIES
-enemyArr = enemy_gen.loadEnemies(rooms, max_rooms * 2)
+enemyArr = []
+enemyArr.extend(enemy_gen.loadEnemies(rooms, max_rooms, 'Starboi'))
+enemyArr.extend(enemy_gen.loadEnemies(rooms, round(max_rooms * 1.5), 'Demondog'))
+enemyArr.extend(enemy_gen.loadEnemies(rooms, 3, 'Hells Janitor'))
 for enemy in enemyArr:
     # enemy_arr.append({'x_loc' : x_pos, 'y_loc' : y_pos, 'hp' : stat_hp, 'att' : stat_att, 'elem' : stat_elem, 'crit_dmg' : crit_dmg, 'crit_chc' : crit_chc, 'mutations' : stat_mut, 'size' : default_size})
     enemy_gen.updateMut(enemy)
     round(enemy['hp'], 2)
     round(enemy['att'], 2)
     round(enemy['def'], 2)
-    print('ENEMY at X:', enemy['x_loc'], 'Y:', enemy['y_loc'], '    NAME:', enemy['name'], '| HP:', enemy['hp'],'| ATT:', enemy['att'], '| DEF:', enemy['def'], '| Element', enemy['elem'], '| CDMG:', str(enemy['crit_dmg']) + 'X', '| CHC:', str(enemy['crit_chc']) + '%', '| MUTATIONS:', enemy['mutations'], '| XP:', str(enemy['xp']) + ' pts')
+    print('MONSTER:', enemy['name'], '| HP:', enemy['hp'],'| ATT:', enemy['att'], '| DEF:', enemy['def'], '| Element', enemy['elem'], '| CDMG:', str(enemy['crit_dmg']) + 'X', '| CHC:', str(enemy['crit_chc']) + '%', '| MUTATIONS:', enemy['mutations'], '| XP:', str(enemy['xp']) + ' pts')
 
 # hero stats
 print('HERO BASE STATS ', '     HP:', hero_stats['hp'],'| ATT:', hero_stats['att'], '| DEF:', hero_stats['def'], '| Element:', hero_stats['elem'], '| CDMG:', str(hero_stats['crit_dmg']) + 'X', '| CHC:', str(hero_stats['crit_chc']) + '%', '| MUTATIONS: ', hero_stats['mutations'], 'XP:', hero_stats['xp'])
@@ -154,9 +158,11 @@ wall = pygame.image.load("assets/wall/default-wall-64.bmp")
 floor = pygame.image.load("assets/floor/default-floor-64.bmp")
 char = pygame.image.load("assets/character/knight-64.png")
 goal = pygame.image.load("assets/floor/goal-64.png")
-starfish = pygame.image.load("assets/enemy/starfish-64.png")
 fog = pygame.image.load("assets/misc/fog-64.png")
 antifog = pygame.image.load("assets/misc/antifog-64.png")
+starfish = pygame.image.load("assets/enemy/starfish-64.png")
+dog = pygame.image.load("assets/enemy/demondog-64.png")
+ogre = pygame.image.load("assets/enemy/hellsjanitor.png")
 
 def checkForEnemy(x, y):
     # return false if enemy occupying space
@@ -251,8 +257,13 @@ def renderMap():
     
         # if not in the fog display
         if((new_x >= fog_x and new_x <= fog_x2)and (new_y >= fog_y and new_y <= fog_y2)):
-            screen.blit(starfish, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
-            screen.blit(showStats_HP, (new_x*unit_size - (0.3*unit_size), new_y*unit_size - (0.8*unit_size)))
+            if (enemy['name'] == 'Starboi'):
+                screen.blit(starfish, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+            elif (enemy['name'] == 'Demondog'):
+                screen.blit(dog, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+            elif (enemy['name'] == 'Hells Janitor'):
+                screen.blit(ogre, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+            screen.blit(showStats_HP, (new_x*unit_size + (0.1*unit_size), new_y*unit_size - (0.4*unit_size)))
 
 renderMap()
 
