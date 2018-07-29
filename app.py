@@ -43,6 +43,7 @@ window_height = window_height_units * unit_size
 
 # window size
 size = window_width, window_height
+fog_size = 3
 
 mapArr = map_gen.generateMap(map_min_width, map_max_width, map_min_height, map_max_height)
 mapWidth, mapHeight = mapArr.shape
@@ -129,6 +130,7 @@ floor = pygame.image.load("assets/floor/default-floor-64.bmp")
 char = pygame.image.load("assets/character/knight-64.png")
 goal = pygame.image.load("assets/floor/goal-64.png")
 starfish = pygame.image.load("assets/enemy/starfish-64.png")
+fog = pygame.image.load("assets/misc/fog-64.png")
 
 def checkForEnemy(x, y):
     # return false if enemy occupying space
@@ -177,6 +179,13 @@ def validMove(move):
 def renderMap():
     #Clear screen
     screen.fill(black)
+
+    #load fog data
+    fog_x = char_x_rel-fog_size
+    fog_x2 = char_x_rel+fog_size
+    fog_y = char_y_rel-fog_size
+    fog_y2 = char_y_rel+fog_size
+
     # create rectangles
     for x in range(window_x_units, window_width_units+window_x_units):
         for y in range(window_y_units, window_height_units+window_y_units):
@@ -189,11 +198,17 @@ def renderMap():
             elif(mapArr[x, y] == 0):
                 #print('Drawing floor')
                 screen.blit(floor, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+            
+            # draw fog of war
+            if((x < fog_x or x > fog_x2) or (y < fog_y or y > fog_y2)):
+                screen.blit(fog, (x*unit_size, y*unit_size, unit_size, unit_size))
+
     # draw goal point
-    # new_x = (add)-window_x_units
     new_x = end_x-window_x_units
     new_y = end_y-window_y_units
-    screen.blit(goal, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+    # if not in the fog display
+    if((new_x >= fog_x and new_x <= fog_x2)and (new_y >= fog_y and new_y <= fog_y2)):
+        screen.blit(goal, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
 
     # draw character
     screen.blit(char, (char_x_rel*unit_size, char_y_rel*unit_size, unit_size, unit_size))
@@ -202,7 +217,9 @@ def renderMap():
     for enemy in enemyArr:
         new_x = enemy['x_loc']-window_x_units
         new_y = enemy['y_loc']-window_y_units
-        screen.blit(starfish, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
+        # if not in the fog display
+        if((new_x >= fog_x and new_x <= fog_x2)and (new_y >= fog_y and new_y <= fog_y2)):
+            screen.blit(starfish, (new_x*unit_size, new_y*unit_size, unit_size, unit_size))
 
 renderMap()
 
