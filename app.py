@@ -180,6 +180,8 @@ def validMove(move):
 def renderMap():
     #Clear screen
     screen.fill(black) 
+    # if called either init / player made a move
+    # enemy_turn
     # create rectangles
     for x in range(window_x_units, window_width_units+window_x_units):
         for y in range(window_y_units, window_height_units+window_y_units):
@@ -208,7 +210,7 @@ def renderMap():
         for y in range(0, window_height_units):
             # draw antifog of war
             if((x >= fog_x and x <= fog_x2) and (y >= fog_y and y <= fog_y2)):
-                print('add fog')
+                print('')
             else:
                 screen.blit(fog, (x*unit_size, y*unit_size, unit_size, unit_size))
 
